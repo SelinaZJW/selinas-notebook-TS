@@ -87,7 +87,7 @@ export const Node = ({
       ref={innerRef}
       style={styles.row}
       className={classNames("row", state)}
-      onClick={(e) => handlers.select(e)}
+      onClick={(e) => handlers.select(e, {selectOnClick: true})}
     >
 
       <div className="row-contents" style={styles.indent}>
