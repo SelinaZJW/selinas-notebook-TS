@@ -5,17 +5,23 @@ import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import { AlignLeft } from 'react-feather';
 import { useBackend } from './backend';
+import { DataDisplay } from './DataDisplay';
 
-export default function DisplaySlider() {
-  const [value, setValue] = React.useState<number>(
-    1,
-  );
+type LevelProps = {
+  level: number;
+  setLevel: any
+}
+
+export default function DisplaySlider(props: LevelProps) {
+  // const [level, setLevel] = React.useState<number>(
+  //   1,
+  // );
 
   const backend = useBackend();
 
-  const handleSliderChange = (event: Event, newValue: number) => {
-    setValue(newValue);
-    backend.onSetDisplay(newValue);
+  const handleSliderChange = (event: Event, newLevel: number) => {
+    props.setLevel(newLevel);
+    // backend.onSetDisplay(newLevel);
   };
 
   // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +39,7 @@ export default function DisplaySlider() {
   // };
 
   return (
+    <>
     <Box sx={{ width: 250 }}>
       <Typography id="display-slider" gutterBottom>
         Display Level
@@ -43,7 +50,7 @@ export default function DisplaySlider() {
         </Grid>
         <Grid item xs>
           <Slider
-            value={typeof value === 'number' ? value : 0}
+            value={props.level}
             onChange={handleSliderChange}
             aria-labelledby="display-slider"
             valueLabelDisplay="auto"
@@ -55,7 +62,7 @@ export default function DisplaySlider() {
         </Grid>
         <Grid item>
           <Typography id="display-level" gutterBottom>
-            {value}
+            {props.level}
           </Typography>
           {/* <Input
             value={value}
@@ -73,5 +80,8 @@ export default function DisplaySlider() {
         </Grid>
       </Grid>
     </Box>
+
+    <DataDisplay />
+    </>
   );
 }

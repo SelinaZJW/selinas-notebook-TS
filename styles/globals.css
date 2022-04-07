@@ -32,9 +32,14 @@ main {
   margin: 0 auto;
 }
 
-.got-lineage { 
+.content {
   width: 700px;
-  height: 70%;
+  height: 800px;
+}
+
+.displayBox { 
+  width: 700px;
+  height: 400px;
   background: rgba(0,0,0,0.04);
   border: 1px solid gainsboro;
   border-radius: 5px;

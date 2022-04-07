@@ -93,13 +93,16 @@ export function useBackend() {
       const node = find(id);
       if (node) {
         node.model.name = name;
-        changeDisplay(data, 2);
         update();
       }
     },
 
     onSetDisplay: (displayLevel: number) => {
       changeDisplay(data, displayLevel);
+      update();
+    },
+
+    onDataUpdate: () => {
       update();
     }
 
