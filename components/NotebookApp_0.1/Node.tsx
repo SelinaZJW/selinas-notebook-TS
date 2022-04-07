@@ -1,11 +1,24 @@
 import classNames from "classnames";
-import React, { FocusEvent, KeyboardEvent } from "react";
+import React, { CSSProperties, FocusEvent, KeyboardEvent } from "react";
 import { ChevronDown, ChevronRight, FileText, Folder, PenTool, FilePlus } from "react-feather";
-import { NodeHandlers, NodeRendererProps } from "react-arborist";
+import { NodeHandlers,  NodeState, TreeApi } from "react-arborist";
 import { MyData } from "./backend";
 
 const size = 16;
 const color = "#999";
+
+export declare type NodeRendererProps<T> = {
+  innerRef: (el: HTMLDivElement | null) => void;
+  styles: {
+      row: CSSProperties;
+      indent: CSSProperties;
+  };
+  data: T;
+  state: NodeState;
+  handlers: NodeHandlers;
+  tree: TreeApi<T>;
+  preview: boolean;
+};
 
 function Icon({ isFolder, isSelected }: any) {
   if (isFolder) {
