@@ -24,7 +24,7 @@ export default function App() {
         />
           </span>
         </section> */}
-        <DisplaySlider />
+        {/* <DisplaySlider /> */}
         
         
         <section className="got-lineage">
