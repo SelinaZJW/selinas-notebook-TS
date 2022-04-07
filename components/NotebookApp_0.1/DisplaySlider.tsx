@@ -5,11 +5,12 @@ import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import { AlignLeft } from 'react-feather';
 import { useBackend } from './backend';
-import { DataDisplay } from './DataDisplay';
+import { Button } from '@mui/material';
 
 type LevelProps = {
   level: number;
-  setLevel: any
+  setLevel: any;
+  handleSetDisplay: any
 }
 
 export default function DisplaySlider(props: LevelProps) {
@@ -18,6 +19,7 @@ export default function DisplaySlider(props: LevelProps) {
   // );
 
   const backend = useBackend();
+  const maxLevel = backend.depth
 
   const handleSliderChange = (event: Event, newLevel: number) => {
     props.setLevel(newLevel);
@@ -40,10 +42,12 @@ export default function DisplaySlider(props: LevelProps) {
 
   return (
     <>
-    <Box sx={{ width: 250 }}>
-      <Typography id="display-slider" gutterBottom>
+    <Box sx={{ width: 450, '& button': { marginBottom: 1 } }}>
+
+      <Typography id="display-level" gutterBottom>
         Display Level
       </Typography>
+
       <Grid container spacing={2} alignItems="center">
         <Grid item>
           <AlignLeft />
@@ -57,12 +61,12 @@ export default function DisplaySlider(props: LevelProps) {
             step={1}
             marks={true}
             min={1}
-            max={3}
+            max={maxLevel}
           />
         </Grid>
         <Grid item>
-          <Typography id="display-level" gutterBottom>
-            {props.level}
+          <Typography id="display-slider" gutterBottom>
+            {props.level} of {maxLevel} levels
           </Typography>
           {/* <Input
             value={value}
@@ -78,10 +82,14 @@ export default function DisplaySlider(props: LevelProps) {
             // }}
           /> */}
         </Grid>
+        <Grid item style={{ width: '10'}}>
+          {/* <button style={{ margin: '5'}} onClick={props.handleSetDisplay}> Set </button> */}
+          <Button   size="small" variant="contained" onClick={props.handleSetDisplay}>Set</Button>
+        </Grid>
       </Grid>
+
     </Box>
 
-    <DataDisplay />
     </>
   );
 }

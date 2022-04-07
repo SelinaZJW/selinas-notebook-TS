@@ -20,11 +20,6 @@ html, body, #root {
   height: 100%;
 }
 
-.example {
-  height: 100%;
-  width: 100%;
-}
-
 main {
   padding: 16px 16px;
   width: 700px;
@@ -34,12 +29,13 @@ main {
 
 .content {
   width: 700px;
-  height: 800px;
+  height: 540px;
 }
 
 .displayBox { 
   width: 700px;
-  height: 400px;
+  height: 800px;
+  margin-top: 5px;
   background: rgba(0,0,0,0.04);
   border: 1px solid gainsboro;
   border-radius: 5px;

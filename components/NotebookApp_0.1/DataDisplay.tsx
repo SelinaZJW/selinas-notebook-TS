@@ -11,18 +11,15 @@ export function DataDisplay() {
   const [level, setLevel] = useState<number>( 1 );
   
   function handleSetDisplay() {
-    backend.onSetDisplay(level);
-    backend.onDataUpdate();  //need 2 data updates, why???
+    backend.onSetDisplay(level);  //need to update in data display component
+    // backend.onDataUpdate();  //need 2 data updates, why???
   }
 
   return (
     <AutoSize>
       {(props: any) => (
         <>
-        <span>
-        <DisplaySlider level={level} setLevel={setLevel}/>
-        <button style={{ display: 'inline'}} onClick={handleSetDisplay}> Set </button>
-        </span>
+        <DisplaySlider  level={level} setLevel={setLevel} handleSetDisplay={handleSetDisplay} /> 
         <Tree
           ref={(tree: TreeApi) => {
             // @ts-ignore
@@ -49,5 +46,7 @@ export function DataDisplay() {
         </>
       )}
     </AutoSize>
+
+    
   );
 }

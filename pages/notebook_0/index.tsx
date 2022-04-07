@@ -12,7 +12,7 @@ import { DataDisplay } from "../../components/NotebookApp_0.1/DataDisplay";
 export default function App() {
   
   return (
-    <div className="example">
+    <div>
       <main>
         <h1>Notebook Version 0.1</h1>
         

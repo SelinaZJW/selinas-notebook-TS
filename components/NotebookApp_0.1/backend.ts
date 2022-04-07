@@ -48,6 +48,11 @@ function changeDisplay (dataNode: MyData, displayLevel: number): MyData {
   return dataNode;
 }
 
+function getDataDepth(dataNode: MyData): number {
+  return Array.isArray(dataNode.children) ? 
+    1 + Math.max(0, ...dataNode.children.map(getDataDepth)) :
+    0;
+}
 
 
 export function useBackend() {
@@ -55,9 +60,12 @@ export function useBackend() {
   const root = useMemo(() => new TreeModel().parse(data), [data]);
   const find = useCallback((id) => findById(root, id), [root]);
   const update = () => setData({ ...root.model });
+  const depth = getDataDepth(data)
+  console.log(depth)
 
   return {
     data,
+    depth,
     onMove: (
       srcIds: string[],
       dstParentId: string | null,
