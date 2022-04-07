@@ -4,7 +4,8 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
+      "es6"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -26,5 +27,10 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ], 
+
+  // mui config
+  "noImplicitAny": true,
+  "noImplicitThis": true,
+  "strictNullChecks": true
 }
