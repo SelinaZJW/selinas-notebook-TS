@@ -3,15 +3,15 @@
 // The number of spaces at the beginning indicate the level
 
 export function makeTree(string: string, openByDefault: boolean) {
-  const root = { id: "ROOT", name: "ROOT", isOpen: true };
+  const root = { id: "ROOT", title: "ROOT", isOpen: true };
   let prevNode = root;
   let prevLevel = -1;
   let id = 1;
   string.split("\n").forEach((line) => {
-    const name = line.trimStart();
-    const level = line.length - name.length;
+    const title = line.trimStart();
+    const level = line.length - title.length;
     const diff = level - prevLevel;
-    const node = { id: (id++).toString(), name, isOpen: openByDefault };
+    const node = { id: (id++).toString(), title, isOpen: openByDefault };
     if (diff === 1) {
       // First child
       //@ts-ignore
