@@ -1,20 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
 import TreeModel from "tree-model-improved";
-// import { makeLargeData } from "./large-dataset";
-import lineage from "./lineage";
-import mock_data from "./mock_data";
+import { bookmarks } from "../../pages/api/mock-data-bookmarks"
 
 function findById(node: any, id: string): TreeModel.Node<any> | null {
   return node.first((n: any) => n.model.id === id);
 }
 
-// const initData = lineage;
-const initData = mock_data;
-// const initData = makeLargeData();
+// const initData = bookmarks;
+
 export type MyData = {
   id: string;
-  isOpen: boolean;
-  name: string;
+  isOpen?: boolean;
+  title: string;
   children?: MyData[];
   level: number     //add hierarchy to database
 };
@@ -44,7 +41,7 @@ function changeDisplay (dataNode: MyData, displayLevel: number): MyData {
     dataNode.children.forEach(child => changeDisplay(child, displayLevel)); 
   }
 
-  console.log(dataNode)
+  // console.log(dataNode)
   return dataNode;
 }
 
@@ -55,13 +52,14 @@ function getDataDepth(dataNode: MyData): number {
 }
 
 
-export function useBackend() {
-  const [data, setData] = useState<MyData>(initData as MyData);
+
+export function useBackend(props: {initData: MyData}) {
+  const [data, setData] = useState<MyData>(props.initData as MyData);
   const root = useMemo(() => new TreeModel().parse(data), [data]);
   const find = useCallback((id) => findById(root, id), [root]);
   const update = () => setData({ ...root.model });
   const depth = getDataDepth(data)
-  console.log(depth)
+  // console.log(depth)
 
   return {
     data,
@@ -97,10 +95,10 @@ export function useBackend() {
       }
     },
 
-    onEdit: (id: string, name: string) => {
+    onEdit: (id: string, title: string) => {
       const node = find(id);
       if (node) {
-        node.model.name = name;
+        node.model.title = title;
         update();
       }
     },
@@ -112,6 +110,10 @@ export function useBackend() {
 
     onDataUpdate: () => {
       update();
+    },
+
+    onAdd: () => {
+
     }
 
   };

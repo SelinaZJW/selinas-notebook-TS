@@ -59,7 +59,7 @@ function MaybeToggleButton({ toggle, isOpen, isFolder, isSelected }: any) {
 
 type FormProps = { defaultValue: string } & NodeHandlers;
 
-function RenameForm({ defaultValue, submit, reset }: FormProps) {
+function EditForm({ defaultValue, submit, reset }: FormProps) {
   const inputProps = {
     defaultValue,
     autoFocus: true,
@@ -93,7 +93,7 @@ export const Node = ({
 }: NodeRendererProps<MyData>) => {
   const folder = Array.isArray(data.children);
   const open = state.isOpen;
-  const name = data.name;
+  const title = data.title;
 
   return (
     <div
@@ -118,12 +118,12 @@ export const Node = ({
 
         {state.isEditing ? 
         (
-          <RenameForm defaultValue={name} {...handlers} />
+          <EditForm defaultValue={title} {...handlers} />
         ) 
         : 
         (
           <span>
-            {name}{" "}
+            {title}{" "}
             {state.isSelected && (
               <>
               <button style={{ display: "inline" }} onClick={handlers.edit}>

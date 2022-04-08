@@ -10,7 +10,8 @@ import { Button } from '@mui/material';
 type LevelProps = {
   level: number;
   setLevel: any;
-  handleSetDisplay: any
+  handleSetDisplay: any;
+  maxLevel: number
 }
 
 export default function DisplaySlider(props: LevelProps) {
@@ -18,8 +19,8 @@ export default function DisplaySlider(props: LevelProps) {
   //   1,
   // );
 
-  const backend = useBackend();
-  const maxLevel = backend.depth
+  // const backend = useBackend();
+  // const maxLevel = backend.depth
 
   const handleSliderChange = (event: Event, newLevel: number) => {
     props.setLevel(newLevel);
@@ -61,12 +62,12 @@ export default function DisplaySlider(props: LevelProps) {
             step={1}
             marks={true}
             min={1}
-            max={maxLevel}
+            max={props.maxLevel}
           />
         </Grid>
         <Grid item>
           <Typography id="display-slider" gutterBottom>
-            {props.level} of {maxLevel} levels
+            {props.level} of {props.maxLevel} levels
           </Typography>
           {/* <Input
             value={value}

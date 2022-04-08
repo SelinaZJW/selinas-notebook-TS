@@ -7,18 +7,16 @@
 
 // import "./NotebookApp.module.css";
 // import "../../styles/globals.css"
-import { DataDisplay } from "../../components/NotebookApp_0.1/DataDisplay";
+import { Content } from "../../components/NotebookApp_0.1/Content";
 
 export default function App() {
-  
   return (
     <div>
       <main>
         <h1>Notebook Version 0.1</h1>
         
-        
         <section className="content">
-          <DataDisplay />
+          <Content />
         </section>
         
       </main>
