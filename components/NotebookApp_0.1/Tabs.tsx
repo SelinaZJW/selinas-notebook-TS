@@ -15,8 +15,8 @@ export default function Notes({backend_1, backend_2}) {
     <TabPanel style={{ backgroundColor: 'rgba(0,0,0,0.04)', margin: 0}}>
       <NotesDisplay backend={backend_1} />
     </TabPanel>
-    <TabPanel>
+    {/* <TabPanel>
       <NotesDisplay backend={backend_2} />
-    </TabPanel>
+    </TabPanel> */}
   </Tabs>
 )};

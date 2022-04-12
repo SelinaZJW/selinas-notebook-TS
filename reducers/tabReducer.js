@@ -1,9 +1,6 @@
 import notebookService from "../services/notebookService";
 
 const tabReducer = (state = [], action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
-
   switch(action.type) {
     case 'INIT_TABS': {
       return action.data

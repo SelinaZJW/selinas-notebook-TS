@@ -1,10 +1,6 @@
-import exp from "constants";
 import notebookService from "../services/notebookService";
 
-const noteReducer = (state = [], action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
-
+const noteReducer = (state = {}, action) => {
   switch(action.type) {
     case 'INIT_NOTES': {
       return action.data
@@ -18,6 +14,9 @@ const noteReducer = (state = [], action) => {
       return action.data
     }
     case 'EDIT_NOTE_PARENT': {
+      return action.data
+    }
+    case 'EDIT_NOTE_INDEX': {
       return action.data
     }
     case 'NEW_NOTE': {

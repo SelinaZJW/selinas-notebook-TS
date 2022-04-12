@@ -1,4 +1,4 @@
-import { MyData } from "./backend";
+import { MyData } from "./types";
 
 export function makeLargeData(): MyData {
   const root: MyData = { id: "ROOT", title: "ROOT", isOpen: true, children: [], level: 0 };

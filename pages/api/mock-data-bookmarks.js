@@ -16,6 +16,7 @@ export const bookmarks = {
           id: nanoid(),
           title: "brim/pulls",
           level: 2,
+          children: []
         },
         {
           id: nanoid(),
