@@ -4,7 +4,6 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import { AlignLeft } from 'react-feather';
-import { useBackend } from './backend';
 import { Button } from '@mui/material';
 
 type LevelProps = {

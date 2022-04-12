@@ -6,6 +6,8 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import NotesDisplay from './NotesDisplay';
 
+
+
 export default function NoteTabs({backend_1, backend_2}) {
   const [value, setValue] = React.useState('1');
 
@@ -14,6 +16,7 @@ export default function NoteTabs({backend_1, backend_2}) {
   };
 
   return (
+    <>
     <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -27,5 +30,9 @@ export default function NoteTabs({backend_1, backend_2}) {
         <TabPanel value="2"><NotesDisplay backend={backend_2} /> </TabPanel>
       </TabContext>
     </Box>
+
+
+    
+    </>
   );
 }

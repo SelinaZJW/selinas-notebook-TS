@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React, { CSSProperties, FocusEvent, KeyboardEvent } from "react";
 import { ChevronDown, ChevronRight, FileText, Folder, PenTool, FilePlus } from "react-feather";
 import { NodeHandlers,  NodeState, TreeApi } from "react-arborist";
-import { MyData } from "./backend";
+import { MyData } from "./types"
 
 const size = 16;
 const color = "#999";

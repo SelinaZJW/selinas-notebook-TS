@@ -5,6 +5,7 @@ import NotesDisplay from "./NotesDisplay"
 import { bookmarks } from "../../pages/api/mock-data-bookmarks";
 import { criminal_law } from "../../pages/api/mock-data-criminal-law"
 import NoteTabs from "./NoteTabs";
+import Notes from "./Tabs";
 
 export function Content() {
   const backend_b = useBackend({initData: bookmarks});
@@ -22,7 +23,8 @@ export function Content() {
         {/* <h3 className="tabTitle">{backend_b.data.title}</h3>
         <NotesDisplay backend={backend_b} />
         <NotesDisplay backend={backend_cl} /> */}
-        <NoteTabs backend_1={backend_b} backend_2={backend_cl} />
+        {/* <NoteTabs backend_1={backend_b} backend_2={backend_cl} /> */}
+        <Notes backend_1={backend_b} backend_2={backend_cl} />
       </>
     
   );

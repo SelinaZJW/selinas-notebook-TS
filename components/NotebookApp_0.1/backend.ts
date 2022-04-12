@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import TreeModel from "tree-model-improved";
-import { bookmarks } from "../../pages/api/mock-data-bookmarks"
+// import { bookmarks } from "../../pages/api/mock-data-bookmarks"
+import { MyData } from "./types"
 
 function findById(node: any, id: string): TreeModel.Node<any> | null {
   return node.first((n: any) => n.model.id === id);
@@ -8,13 +9,13 @@ function findById(node: any, id: string): TreeModel.Node<any> | null {
 
 // const initData = bookmarks;
 
-export type MyData = {
-  id: string;
-  isOpen?: boolean;
-  title: string;
-  children?: MyData[];
-  level: number     //add hierarchy to database
-};
+// export type MyData = {
+//   id: string;
+//   isOpen?: boolean;
+//   title: string;
+//   children?: MyData[];
+//   level: number     //add hierarchy to database
+// };
 
 function changeLevel(dataNode: MyData, parentLevel: number): MyData  {
   dataNode.level = parentLevel;

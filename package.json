@@ -10,13 +10,18 @@
     "@emotion/styled": "^11.8.1",
     "@mui/lab": "^5.0.0-alpha.76",
     "@mui/material": "^5.6.0",
+    "axios": "^0.26.1",
     "classnames": "^2.3.1",
     "next": "latest",
     "react": "17.0.2",
     "react-arborist": "^1.0.3",
     "react-dom": "17.0.2",
     "react-feather": "^2.0.9",
+    "react-redux": "^7.2.8",
+    "react-tabs": "^4.2.0",
     "react-virtualized-auto-sizer": "^1.0.6",
+    "redux": "^4.1.2",
+    "redux-thunk": "^2.4.1",
     "tree-model-improved": "^2.0.1"
   },
   "devDependencies": {
