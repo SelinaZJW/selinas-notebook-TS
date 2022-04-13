@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import ContentEditable from "react-contenteditable";
+import ContentEditable from "react-contenteditable";   
 
 const useRefCallback = <T extends any[]>(
   value: ((...args: T) => void) | undefined,
@@ -36,7 +36,6 @@ const Editable = (props) => {
     console.log(html); // 👍 correct value
   }, [html]);
 
-
   return (
     <ContentEditable
       html={html}
@@ -44,7 +43,7 @@ const Editable = (props) => {
       onChange={handleChange} // handle innerHTML change
       onKeyDown={handleKeyDown}
       onBlur={handleBlur}
-      style={{ minWidth: 10, border: 1}}
+      style={{ minWidth: 20, border: 1}}
     />
   );
 
