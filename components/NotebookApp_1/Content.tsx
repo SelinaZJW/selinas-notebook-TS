@@ -45,8 +45,16 @@ export function Content({tabs, tabNotes, setTabNotes}) {
   //     setData(tabNotes)
   //     console.log(data)
   //   }
-  // }
+  // }'
+  let dataLoaded = false
+  if (tabNotes.length !== 0) {
+    dataLoaded = true
+  }
+  console.log(dataLoaded)
 
+  if (dataLoaded === true) {
+    return <Tabs_Drag initData={tabNotes} />
+  }
 
   return (
       <>
@@ -55,8 +63,8 @@ export function Content({tabs, tabNotes, setTabNotes}) {
         <NotesDisplay backend={backend_b} />
         <NotesDisplay backend={backend_cl} /> */}
         {/* <NoteTabs backend_1={backend_b} backend_2={backend_cl} /> */}
-        <Notes backend_1={backend_b} backend_2={backend_cl} tabs={tabs} setTabNotes={setTabNotes} backend={backend} />
-        <Tabs_Drag />
+        {/* <Notes backend_1={backend_b} backend_2={backend_cl} tabs={tabs} setTabNotes={setTabNotes} backend={backend} /> */}
+        {/* <Tabs_Drag initData={tabNotes} /> */}
         {/* <Editable /> */}
       </>
     

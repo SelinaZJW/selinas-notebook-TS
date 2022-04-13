@@ -39,11 +39,19 @@ export const initializeTabNotes = (tabId) => {
   } 
 }
 
-export const initializeAllNotes = (tabs) => {
+export const initializeAllNotes = () => {
   return async dispatch =>  {
+    const tabs = await notebookService.getAllTabs()
     const tabIds = tabs.map(t => t.id)
+    // console.log(tabIds)
     // const tabNotes = await notebookService.getTabNotes(tabId)
-    const notes = tabIds.map(async tabId => await notebookService.getTabNotes(tabId))
+    const notes = await Promise.all(tabIds.map(async (tabId) => {
+      const tabNotes = await notebookService.getTabNotes(tabId)
+      // console.log(tabNotes)
+      return tabNotes
+    }))
+    // console.log(notes)
+
     dispatch({
       type: 'INIT_NOTES', 
       data: notes

@@ -11,6 +11,7 @@ export function Main() {
 
   useEffect(() => {
     dispatch(initializeTabs())
+    dispatch(initializeAllNotes())
   }, [])
 
   const tabs = useSelector((state: any) => state.tabs)
