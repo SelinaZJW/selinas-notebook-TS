@@ -24,7 +24,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "components/NotebookApp_1/Tabs_3.tsx" ],
   "exclude": [
     "node_modules"
   ], 

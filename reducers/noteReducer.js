@@ -1,6 +1,6 @@
 import notebookService from "../services/notebookService";
 
-const noteReducer = (state = {}, action) => {
+const noteReducer = (state = [], action) => {
   switch(action.type) {
     case 'INIT_NOTES': {
       return action.data
@@ -11,7 +11,7 @@ const noteReducer = (state = {}, action) => {
       // const votedAnecdote = { ...anecdoteToVote, votes: anecdoteToVote.votes + 1 }
 
       // return state.map(a => a.id !== id ? a : votedAnecdote )
-      return action.data
+      return [action.data]
     }
     case 'EDIT_NOTE_PARENT': {
       return action.data
@@ -27,12 +27,26 @@ const noteReducer = (state = {}, action) => {
   } 
 }
 
-export const initializeNotes = (tabId) => {
+export const initializeTabNotes = (tabId) => {
   return async dispatch =>  {
+    // const tabIds = tabs.map(t => t.id)
     const tabNotes = await notebookService.getTabNotes(tabId)
+    // const notes = tabIds.map(tabId => await notebookService.getTabNotes(tabId))
     dispatch({
       type: 'INIT_NOTES', 
       data: tabNotes
+    })
+  } 
+}
+
+export const initializeAllNotes = (tabs) => {
+  return async dispatch =>  {
+    const tabIds = tabs.map(t => t.id)
+    // const tabNotes = await notebookService.getTabNotes(tabId)
+    const notes = tabIds.map(async tabId => await notebookService.getTabNotes(tabId))
+    dispatch({
+      type: 'INIT_NOTES', 
+      data: notes
     })
   } 
 }
@@ -43,7 +57,7 @@ export const editNoteTitle = (title, noteId) => {
     const tabId = editedNote.tabId
     const updatedTabNotes = await notebookService.getTabNotes(tabId)
     dispatch({
-      type: 'INIT_NOTES', 
+      type: 'EDIT_NOTE_TITLE', 
       data: updatedTabNotes
     })
   } 
@@ -55,7 +69,7 @@ export const editNoteParent = (parentId, noteId) => {
     const tabId = editedNote.tabId
     const updatedTabNotes = await notebookService.getTabNotes(tabId)
     dispatch({
-      type: 'INIT_NOTES', 
+      type: 'EDIT_NOTE_PARENT', 
       data: updatedTabNotes
     })
   } 

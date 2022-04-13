@@ -5,7 +5,9 @@ import DisplaySlider from "./DisplaySlider";
 import { bookmarks } from "../../pages/api/mock-data-bookmarks";
 import { criminal_law } from "../../pages/api/mock-data-criminal-law"
 // import NoteTabs from "./NoteTabs";
-import Notes from "./Tabs";
+import Notes from "./Tabs_2";
+import Tabs_Drag from "./Tabs_3"
+import Editable from "./Editable"
 // import { initializeTabs } from "../../reducers/tabReducer"
 // import { initializeNotes } from "../../reducers/noteReducer";
 // import { MyData } from "./types";
@@ -54,6 +56,8 @@ export function Content({tabs, tabNotes, setTabNotes}) {
         <NotesDisplay backend={backend_cl} /> */}
         {/* <NoteTabs backend_1={backend_b} backend_2={backend_cl} /> */}
         <Notes backend_1={backend_b} backend_2={backend_cl} tabs={tabs} setTabNotes={setTabNotes} backend={backend} />
+        <Tabs_Drag />
+        {/* <Editable /> */}
       </>
     
   );
