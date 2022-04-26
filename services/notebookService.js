@@ -66,4 +66,10 @@ const editNoteParent = async (parentId, noteId) => {
   return response.data
 }
 
-export default { getAllTabs, getTabNotes, createNewTab, createNewNote, editTab, editNoteTitle, editNoteContent, editNoteParent }
+const deleteTab = async (tabId) => {
+  const response = await axios.delete(`${baseUrl_tabs}/${tabId}`)
+
+  return response.headers
+}
+
+export default { getAllTabs, getTabNotes, createNewTab, createNewNote, editTab, editNoteTitle, editNoteContent, editNoteParent, deleteTab }

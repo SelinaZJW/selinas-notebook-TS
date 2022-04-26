@@ -30,10 +30,6 @@ export const initializeTabs = () => {
   } 
 }
 
-export const editTab = () => {
-  
-}
-
 
 
 export default tabReducer

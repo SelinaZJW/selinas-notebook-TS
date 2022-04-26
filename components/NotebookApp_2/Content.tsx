@@ -25,6 +25,8 @@ export default function Content() {
   }
   console.log(dataLoaded)
 
+  const emptyDataSet = []
+
 
 
   if (dataLoaded === true) {
@@ -33,7 +35,7 @@ export default function Content() {
 
   return (
       <>
-        <p>no data</p>
+        {/* <Tabs_Drag initData={emptyDataSet} /> */}
       </>
     
   );

@@ -1,11 +1,10 @@
 import React from 'react';
-// import { Button } from 'devextreme-react/button';
 import { Button } from '@mui/material';
 import { Sortable } from 'devextreme-react/sortable';
 import TabPanel from 'devextreme-react/tab-panel';
 import 'devextreme/data/odata/store';
 import 'devextreme/dist/css/dx.light.css';
-import { Plus } from 'react-feather'
+import { Plus, Trash2 } from 'react-feather'
 import { nanoid } from "nanoid";
 
 // import { mock_up } from './data.js';
@@ -14,9 +13,16 @@ import { useBackend } from './backend'
 import NotesDisplay from './NotesDisplay';
 import DisplaySlider from './DisplaySlider'
 
+import { useDispatch } from 'react-redux';
+import { editTab, addTab, deleteTab } from "../../reducers/noteReducer"
+
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { DndProvider } from 'react-dnd'
+
 // const initData = mock_upx
 
 const Tabs_Drag = ({initData}) => {
+  const dispatch = useDispatch()
   const [data, setData] = React.useState(initData);
   const [selectedItem, setSelectedItem] = React.useState(initData[0]);
 
@@ -32,17 +38,19 @@ const Tabs_Drag = ({initData}) => {
     );
   }
 
-  const addButtonHandler = () => {
-    const newItem = {
-      id: nanoid(),
-      isOpen: true,
-      title: "new tab",
-      children: [],
-      level: 0,  
-      index: data.length,
-    };
-    setData([...data, newItem]);
-    setSelectedItem(newItem);
+  const addTabHandler = () => {
+    // const newItem = {
+    //   id: nanoid(),
+    //   isOpen: true,
+    //   title: "new tab",
+    //   children: [],
+    //   level: 0,  
+    //   index: data.length,
+    // };
+    // setData([...data, newItem]);
+    // setSelectedItem(newItem);
+
+    dispatch(addTab("new tab"))  //not updating???
 
     console.log('add')
   }
@@ -63,15 +71,29 @@ const Tabs_Drag = ({initData}) => {
   //   }
   // }
 
+  const deleteTabHandler = (tabId) => {
+    if (window.confirm("Are you sure you want to delete the tab and all its note content?")) {
+      console.log('delete')
+      dispatch(deleteTab(tabId))
+    }
+  }
+
   const renderTitle = (data) => {
     // const closeHandler = () => {
     //   closeButtonHandler(data);
     // }
+
+    const deleteTab = () => {
+      deleteTabHandler(data.id)
+    }
+
     return (
-        <div>
-          <span >
-            <Editable init={`${data.title}`} />
-          </span>
+        <div className='singleTab'>
+            <Editable init={`${data.title}`} onEdit={newValue => dispatch(editTab(newValue, data.id))} />
+            <button id="deleteTabButton" onClick={deleteTab} >   
+              <Trash2 style={{ paddingTop: '2' }} size='17' id='deleteTabIcon' />
+            </button>
+          
           {/* {" "} */}
           {/* <i className="dx-icon dx-icon-close" onClick={closeHandler} /> */}
           {/* {employees.length >= 2 && <i className="dx-icon dx-icon-close" onClick={closeHandler} />} */}
@@ -97,7 +119,7 @@ const Tabs_Drag = ({initData}) => {
   }
 
   return (
-    <>
+    <DndProvider backend={HTML5Backend}>
       <div id="container">
         {/* <Button
           // disabled={disableButton()}
@@ -106,7 +128,7 @@ const Tabs_Drag = ({initData}) => {
           type="default"
           onClick={addButtonHandler}
         /> */}
-        <Button  variant="contained" onClick={addButtonHandler} id="addButton" >
+        <Button  variant="contained" onClick={addTabHandler} id="addTabButton" >
           <Plus style={{ paddingTop: '2', color: "white" }} size="20" /> 
         </Button>
       </div>
@@ -138,7 +160,7 @@ const Tabs_Drag = ({initData}) => {
         />
       </Sortable>
 
-    </>
+    </DndProvider>
   );
 }
 

@@ -21,7 +21,7 @@ export default function DisplaySlider({backend}) {
 
   return (
     <>
-    <Box sx={{ width: 450, '& button': { marginBottom: 1 } }} className="displaySlider">
+    <Box sx={{ width: 500, '& button': { marginBottom: 1 } }} className="displaySlider">
 
       {/* <Typography id="display-level" gutterBottom>
         Display Level

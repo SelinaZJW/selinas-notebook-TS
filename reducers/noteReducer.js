@@ -5,6 +5,22 @@ const noteReducer = (state = [], action) => {
     case 'INIT_NOTES': {
       return action.data
     }
+    case 'EDIT_TAB': {
+      const id = action.data.id
+      const editedTab = state.find(t => t.id === id)
+      const updatedTab = {...editedTab, title: action.data.title}
+
+      return state.map(t => t.id!==id ? t : updatedTab)
+    }
+    case 'NEW_TAB': {
+      const newTab = action.data
+      const tabTree = {...newTab, level: 0, isOpen: true, children: []}
+
+      return [...state, tabTree]
+    }
+    case 'DELETE_TAB': {
+      return action.data
+    }
     case 'EDIT_NOTE_TITLE': {
       // const id = action.data.id
       // const anecdoteToVote = state.find(a => a.id === id)
@@ -57,6 +73,46 @@ export const initializeAllNotes = () => {
       data: notes
     })
   } 
+}
+
+export const editTab = (title, tabId) => {
+  return async dispatch => {
+    const editedTab = await notebookService.editTab(title, tabId)
+
+    dispatch({
+      type: 'EDIT_TAB',
+      data: editedTab
+    })
+  }
+}
+
+export const addTab = (title) => {
+  return async dispatch => {
+    const newTab = await notebookService.createNewTab(title)
+
+    dispatch({
+      type: 'NEW_TAB',
+      data: newTab
+    })
+  }
+}
+
+export const deleteTab = (tabId) => {
+  return async dispatch => {
+    await notebookService.deleteTab(tabId)
+    
+    const tabs = await notebookService.getAllTabs()
+    const tabIds = tabs.map(t => t.id)
+    const notes = await Promise.all(tabIds.map(async (tabId) => {
+      const tabNotes = await notebookService.getTabNotes(tabId)
+      return tabNotes
+    }))
+
+    dispatch({
+      type: 'DELETE_TAB', 
+      data: notes
+    })
+  }
 }
 
 export const editNoteTitle = (title, noteId) => {

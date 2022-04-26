@@ -19,11 +19,11 @@ const useRefCallback = <T extends any[]>(
 };
 
 
-const Editable = (props) => {
-  const [html, setHtml] = useState( `${props.init}`)
+const Editable = ({init, onEdit}) => {
+  const [value, setValue] = useState(init)
 
   const handleChange = useRefCallback((evt) => {
-    setHtml(evt.target.value);
+    setValue(evt.target.value);
   }, []);
 
   const handleKeyDown = (event) => {
@@ -33,12 +33,14 @@ const Editable = (props) => {
   }
 
   const handleBlur = useRefCallback(() => {
-    console.log(html); // 👍 correct value
-  }, [html]);
+    console.log(value); // 👍 correct value
+    onEdit(value)
+    // dispatch(editTab(html, props.tabId))
+  }, [value]);
 
   return (
     <ContentEditable
-      html={html}
+      html={value}
       disabled={false} // use true to disable edition
       onChange={handleChange} // handle innerHTML change
       onKeyDown={handleKeyDown}

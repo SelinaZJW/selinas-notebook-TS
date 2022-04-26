@@ -7,6 +7,9 @@ export default function NotesDisplay({backend}) {
 
   return (
     <div className="displayBox">
+    <button>
+      add 
+    </button>
     <Tree
       ref={(tree: TreeApi) => {
         // @ts-ignore
@@ -30,7 +33,7 @@ export default function NotesDisplay({backend}) {
       onContextMenu={() => console.log("context menu the tree")}
     >
       {Node}
-    </Tree>   
+    </Tree>  
     </div>
   );
 }
