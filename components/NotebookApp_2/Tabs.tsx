@@ -5,6 +5,7 @@ import TabPanel from 'devextreme-react/tab-panel';
 import 'devextreme/data/odata/store';
 import 'devextreme/dist/css/dx.light.css';
 import { Plus, Trash2 } from 'react-feather'
+import Tooltip from '@mui/material/Tooltip';
 import { nanoid } from "nanoid";
 
 // import { mock_up } from './data.js';
@@ -23,7 +24,8 @@ import { DndProvider } from 'react-dnd'
 
 const Tabs_Drag = ({initData}) => {
   const dispatch = useDispatch()
-  const [data, setData] = React.useState(initData);
+  //const [data, setData] = React.useState(initData);
+  const data = initData
   const [selectedItem, setSelectedItem] = React.useState(initData[0]);
 
   const NotesTemplate = (props) => {
@@ -90,10 +92,11 @@ const Tabs_Drag = ({initData}) => {
     return (
         <div className='singleTab'>
             <Editable init={`${data.title}`} onEdit={newValue => dispatch(editTab(newValue, data.id))} />
-            <button id="deleteTabButton" onClick={deleteTab} >   
-              <Trash2 style={{ paddingTop: '2' }} size='17' id='deleteTabIcon' />
-            </button>
-          
+            <Tooltip title="delete entire tab" arrow>
+              <button id="deleteTabButton" onClick={deleteTab} >   
+                <Trash2 style={{ paddingTop: '2' }} size='17' id='deleteTabIcon' />
+              </button>
+            </Tooltip>
           {/* {" "} */}
           {/* <i className="dx-icon dx-icon-close" onClick={closeHandler} /> */}
           {/* {employees.length >= 2 && <i className="dx-icon dx-icon-close" onClick={closeHandler} />} */}
@@ -110,16 +113,31 @@ const Tabs_Drag = ({initData}) => {
   }
 
   const onTabDrop = (e) => {
-    const newData = [...data];
-    newData.splice(e.fromIndex, 1);
-    newData.splice(e.toIndex, 0, e.itemData);
+    //const newData = [...data];
+    //newData.splice(e.fromIndex, 1);
+    //newData.splice(e.toIndex, 0, e.itemData);
 
-    setData(newData);
+    //setData(newData);
+
+    //const tabId = data[e.toIndex]
+    //const tabPrevId = data[e.to]
+    const tabId = e.itemData.id
+    const tabPreId = e.toData[e.toIndex]
+
+    window.alert(`fromIndex ${e.fromIndex}`)
+    window.alert(`toIndex ${e.toIndex}`)
+    window.alert(JSON.stringify(tabPreId, null, 2))
+    window.alert("itemData")
+    window.alert(JSON.stringify(tabId, null, 2))
+
+    //window.alert(`We dragged tab ${tabId} such that it follows ${tabPrevId}`)
+
     // newData.forEach, edit index for each id
   }
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={HTML5Backend}>   
+      {/* solve problem of cannot have 2 html5 backends */}
       <div id="container">
         {/* <Button
           // disabled={disableButton()}
@@ -128,9 +146,11 @@ const Tabs_Drag = ({initData}) => {
           type="default"
           onClick={addButtonHandler}
         /> */}
-        <Button  variant="contained" onClick={addTabHandler} id="addTabButton" >
-          <Plus style={{ paddingTop: '2', color: "white" }} size="20" /> 
-        </Button>
+        <Tooltip title="add new tab" arrow>
+          <Button  variant="contained" onClick={addTabHandler} id="addTabButton" >
+            <Plus style={{ paddingTop: '2', color: "white" }} size="20" /> 
+          </Button>
+        </Tooltip>
       </div>
 
       <Sortable

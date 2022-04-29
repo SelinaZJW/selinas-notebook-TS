@@ -3,7 +3,7 @@
 export default function useAddNote() {
  
 
-  return (parentId) => {
-    window.alert(`Attempting to add note to ${parentId}`)
+  return (id, parentId) => {
+    window.alert(`Attempting to add note under ${parentId} with ${id}`)
   }
 }

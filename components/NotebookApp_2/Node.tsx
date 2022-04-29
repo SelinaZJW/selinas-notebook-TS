@@ -1,11 +1,13 @@
 import classNames from "classnames";
 import React, { CSSProperties, FocusEvent, KeyboardEvent, MouseEventHandler, useState } from "react";
-import { ChevronDown, ChevronRight, FileText, Folder, PenTool, FilePlus, Trash2 } from "react-feather";
+import { ChevronDown, ChevronRight, FileText, Folder, FilePlus, Trash2, Edit, CornerDownLeft } from "react-feather";
+import Tooltip from '@mui/material/Tooltip';
 import { NodeHandlers,  NodeState, TreeApi } from "react-arborist";
 import { MyData } from "./types"
 import { EditResult } from "react-arborist/dist/types";
 import useAddNote from "./backend/useAddNote";
 import useDeleteNote from "./backend/useDeleteNote";
+import useAddChildNote from "./backend/useAddChildNote";
 
 const size = 16;
 const color = "#999";
@@ -95,7 +97,6 @@ function EditForm({ defaultValue, submit, reset }: FormProps) {
 }
 
 
-//how to make display update Node immediately???
 export const Node = ({
   innerRef,
   data,
@@ -113,7 +114,8 @@ export const Node = ({
 
   // }
 
-  const addNote = useAddNote()
+  const addNote = useAddNote()   //how to find the parentId of the node in the tree
+  const addChildNote = useAddChildNote()
   const deleteNote = useDeleteNote()
 
   return (
@@ -151,19 +153,32 @@ export const Node = ({
             {title}{" "}
             {state.isSelected && (
               <>
+              <Tooltip title="edit" arrow>
                 <button style={{ display: "inline" }} onClick={handlers.edit}>
                   {/* ✍️  */}
-                  <PenTool style={{ paddingTop: '3' }} size='17' />
+                  <Edit style={{ paddingTop: '3' }} size='17' />
                 </button>
+              </Tooltip>
                 {" "}
-                <button style={{ display: "inline" }} onClick={() => addNote(data.id)}>   
+              <Tooltip title="add new note" arrow>
+                <button style={{ display: "inline" }} onClick={() => addNote(data.id, 'parentId')}>   
+                {/* need to make this add another children in the same class */}
+                  <CornerDownLeft style={{ paddingTop: '2' }} size='17' />
+                </button>
+              </Tooltip>
+                {" "}
+              <Tooltip title="add new note" arrow>
+                <button style={{ display: "inline" }} onClick={() => addChildNote(data.id)}>   
                 {/* need to make this add another children in the same class */}
                   <FilePlus style={{ paddingTop: '2' }} size='17' />
                 </button>
+              </Tooltip>
                 {" "}
+              <Tooltip title="delete" arrow>
                 <button style={{ display: "inline" }} onClick={() => deleteNote(data.id)}>   
                   <Trash2 style={{ paddingTop: '2' }} size='17' />
                 </button>
+              </Tooltip>
                 {/* <button style={{ display: "inline" }} onClick={handlers.edit}>   
                   show details
                 </button> */}
