@@ -10,13 +10,13 @@ export default function Content() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(initializeTabs())
+    // dispatch(initializeTabs())
     dispatch(initializeAllNotes())
   }, [])
   
-  const tabs = useSelector((state: any) => state.tabs)
+  // const tabs = useSelector((state: any) => state.tabs)
   const tabNotes = useSelector((state: any) => state.notes)
-  console.log(tabs)
+  // console.log(tabs)
   console.log(tabNotes)
 
   let dataLoaded = false
@@ -29,13 +29,13 @@ export default function Content() {
 
 
 
-  if (dataLoaded === true) {
-    return <Tabs_Drag initData={tabNotes} />
-  }
+  // if (dataLoaded === true) {
+  //   return <Tabs_Drag initData={tabNotes} />
+  // }
 
   return (
       <>
-        {/* <Tabs_Drag initData={emptyDataSet} /> */}
+        <Tabs_Drag initData={tabNotes} />
       </>
     
   );

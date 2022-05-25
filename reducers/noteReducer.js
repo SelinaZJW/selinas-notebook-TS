@@ -1,4 +1,6 @@
 import notebookService from "../services/notebookService";
+import noteService from "../services/noteService";
+import tabService from "../services/tabService"
 
 const noteReducer = (state = [], action) => {
   switch(action.type) {
@@ -6,63 +8,73 @@ const noteReducer = (state = [], action) => {
       return action.data
     }
     case 'EDIT_TAB': {
-      const id = action.data.id
-      const editedTab = state.find(t => t.id === id)
-      const updatedTab = {...editedTab, title: action.data.title}
+      // const id = action.data.id
+      // const editedTab = state.find(t => t.id === id)
+      // const updatedTab = {...editedTab, title: action.data.title}
 
-      return state.map(t => t.id!==id ? t : updatedTab)
+      // return state.map(t => t.id!==id ? t : updatedTab)
+      return action.data
     }
     case 'NEW_TAB': {
-      const newTab = action.data
-      const tabTree = {...newTab, level: 0, isOpen: true, children: []}
+      // const newTab = action.data
+      // const tabTree = {...newTab, level: 0, isOpen: true, children: []}
 
-      return [...state, tabTree]
+      // return [...state, tabTree]
+      return action.data
     }
     case 'DELETE_TAB': {
       return action.data
     }
-    case 'EDIT_NOTE_TITLE': {
+    case 'EDIT_NOTE': {
       // const id = action.data.id
       // const anecdoteToVote = state.find(a => a.id === id)
       // const votedAnecdote = { ...anecdoteToVote, votes: anecdoteToVote.votes + 1 }
 
       // return state.map(a => a.id !== id ? a : votedAnecdote )
-      return [action.data]
-    }
-    case 'EDIT_NOTE_PARENT': {
-      return action.data
-    }
-    case 'EDIT_NOTE_INDEX': {
       return action.data
     }
     case 'NEW_NOTE': {
-      return [...state, action.data]
+      return action.data
+    }
+    case 'DELETE_NOTE': {
+      return action.data
     }
     default:
     return state
   } 
 }
 
-export const initializeTabNotes = (tabId) => {
-  return async dispatch =>  {
-    // const tabIds = tabs.map(t => t.id)
-    const tabNotes = await notebookService.getTabNotes(tabId)
-    // const notes = tabIds.map(tabId => await notebookService.getTabNotes(tabId))
-    dispatch({
-      type: 'INIT_NOTES', 
-      data: tabNotes
-    })
-  } 
+// export const initializeTabNotes = (tabId) => {
+//   return async dispatch =>  {
+//     // const tabIds = tabs.map(t => t.id)
+//     const tabNotes = await notebookService.getTabNotes(tabId)
+//     // const notes = tabIds.map(tabId => await notebookService.getTabNotes(tabId))
+//     dispatch({
+//       type: 'INIT_NOTES', 
+//       data: tabNotes
+//     })
+//   } 
+// }
+
+const getAllTabNotes = async () => {
+  const tabs = await tabService.getAllTabs()
+    const tabIds = tabs.map(t => t.id)
+    const notes = await Promise.all(tabIds.map(async (tabId) => {
+      const tabNotes = await tabService.getTabNotes(tabId)
+      return tabNotes
+    }))
+  
+  return notes
 }
 
 export const initializeAllNotes = () => {
   return async dispatch =>  {
-    const tabs = await notebookService.getAllTabs()
+    const tabs = await tabService.getAllTabs()
     const tabIds = tabs.map(t => t.id)
     // console.log(tabIds)
     // const tabNotes = await notebookService.getTabNotes(tabId)
     const notes = await Promise.all(tabIds.map(async (tabId) => {
-      const tabNotes = await notebookService.getTabNotes(tabId)
+      const tabNotes = await tabService.getTabNotes(tabId)
       // console.log(tabNotes)
       return tabNotes
     }))
@@ -75,24 +87,42 @@ export const initializeAllNotes = () => {
   } 
 }
 
-export const editTab = (title, tabId) => {
+export const editTab = (tabId, updatedTab) => {
   return async dispatch => {
-    const editedTab = await notebookService.editTab(title, tabId)
+    const editedTab = await tabService.editTab(tabId, updatedTab)
+    console.log(editedTab)
+
+    const tabs = await tabService.getAllTabs()
+    const tabIds = tabs.map(t => t.id)
+    const notes = await Promise.all(tabIds.map(async (tabId) => {
+      const tabNotes = await tabService.getTabNotes(tabId)
+      return tabNotes
+    }))
+    // const notes = getAllTabNotes()
 
     dispatch({
       type: 'EDIT_TAB',
-      data: editedTab
+      data: notes
     })
   }
 }
 
-export const addTab = (title) => {
+export const addTab = (title, after) => {
   return async dispatch => {
-    const newTab = await notebookService.createNewTab(title)
+    const newTab = await tabService.createNewTabAfter(title, after)
+    console.log(newTab)
+
+    // const tabs = await tabService.getAllTabs()
+    // const tabIds = tabs.map(t => t.id)
+    // const notes = await Promise.all(tabIds.map(async (tabId) => {
+    //   const tabNotes = await tabService.getTabNotes(tabId)
+    //   return tabNotes
+    // }))
+    const notes = await getAllTabNotes()
 
     dispatch({
       type: 'NEW_TAB',
-      data: newTab
+      data: notes
     })
   }
 }
@@ -101,12 +131,7 @@ export const deleteTab = (tabId) => {
   return async dispatch => {
     await notebookService.deleteTab(tabId)
     
-    const tabs = await notebookService.getAllTabs()
-    const tabIds = tabs.map(t => t.id)
-    const notes = await Promise.all(tabIds.map(async (tabId) => {
-      const tabNotes = await notebookService.getTabNotes(tabId)
-      return tabNotes
-    }))
+    const notes = await getAllTabNotes()
 
     dispatch({
       type: 'DELETE_TAB', 
@@ -115,29 +140,48 @@ export const deleteTab = (tabId) => {
   }
 }
 
-export const editNoteTitle = (title, noteId) => {
+
+export const editNote = (noteId, updatedNote) => {
   return async dispatch =>  {
-    const editedNote = await notebookService.editNoteTitle(title, noteId)
-    const tabId = editedNote.tabId
-    const updatedTabNotes = await notebookService.getTabNotes(tabId)
+    const editedNote = await noteService.editNote(noteId, updatedNote)
+    console.log(editedNote)
+    // const tabId = editedNote.tabId
+    // const updatedTabNotes = await notebookService.getTabNotes(tabId)
+
+    const notes = await getAllTabNotes()
+
     dispatch({
-      type: 'EDIT_NOTE_TITLE', 
-      data: updatedTabNotes
+      type: 'EDIT_NOTE', 
+      data: notes
     })
   } 
 }
 
-export const editNoteParent = (parentId, noteId) => {
-  return async dispatch =>  {
-    const editedNote = await notebookService.editNoteTitle(parentId, noteId)
-    const tabId = editedNote.tabId
-    const updatedTabNotes = await notebookService.getTabNotes(tabId)
+export const addNote = (tabId, newNote) => {
+  return async dispatch => {
+    const newN = await noteService.createNewNote(tabId, newNote)
+    console.log(newN)
+
+    const notes = await getAllTabNotes()
+
     dispatch({
-      type: 'EDIT_NOTE_PARENT', 
-      data: updatedTabNotes
+      type: 'NEW_NOTE',
+      data: notes
     })
-  } 
+  }
 }
 
+export const deleteNote = (noteId) => {
+  return async dispatch => {
+    await noteService.deleteNote(noteId)
+
+    const notes = await getAllTabNotes()
+
+    dispatch({
+      type: 'DELETE_NOTE',
+      data: notes
+    })
+  }
+}
 
 export default noteReducer

@@ -1,55 +1,12 @@
 import axios from 'axios'
 
-import {ICreateTab, ITab} from "../model"
-
-const baseUrl_tree = 'https://selinas-notes.herokuapp.com/api/v1/tree'
 const baseUrl_tabs = 'https://selinas-notes.herokuapp.com/api/v1/tabs'
 const baseUrl_notes = 'https://selinas-notes.herokuapp.com/api/v1/notes'
 
-const getAllTabs = async () => {
-  const response = await axios.get(baseUrl_tabs)
-  return response.data
-}
-
-const getTabNotes = async (tabId) => {
-  const response = await axios.get(`${baseUrl_tree}/${tabId}`)
-  return response.data
-}
-
-const createNewTab = async (title) => {
-  const newT = {title}
-  const response = await axios.post(baseUrl_tabs, newT)
-  return response.data
-}
-
-const createNewTabAfter = async (title, after) => {
-  const newT = {title, after}
-  const response = await axios.post(baseUrl_tabs, newT)
-  return response.data
-}
-
-
-const createNewNote = async (title, content, parentId, after, tabId) => {
-  const newN = {title, content, parentId, after}
-  const response = await axios.post(`${baseUrl_tabs}/${tabId}/notes`, newN)
-  return response.data
-}
-
-const editTabTitle = async (title, tabId) => {
-  const editedTab = {title}
-  const response = await axios.put(`${baseUrl_tabs}/${tabId}`, editedTab)
-  return response.data
-}
-
-const editTabOrderFirst = async (tabId) => {
-  const editedTab = {first: true}
-  const response = await axios.put(`${baseUrl_tabs}/${tabId}`, editedTab)
-  return response.data
-}
-
-const editTabOrderNonFirst = async (tabId, after) => {
-  const editedTab = {after}
-  const response = await axios.put(`${baseUrl_tabs}/${tabId}`, editedTab)
+//if no parentId, is root
+//if no after, is last 
+const createNewNote = async (tabId, newNote) => {
+  const response = await axios.post(`${baseUrl_tabs}/${tabId}/notes`, newNote)
   return response.data
 }
 
@@ -63,6 +20,12 @@ const editTabOrderNonFirst = async (tabId, after) => {
 //   const response = await axios.put(`${baseUrl_notes}/${noteId}`, updatedNote)
 //   return response.data
 //   }
+
+//updatedNote is object/request
+const editNote = async (noteId, updatedNote) => {
+  const response = await axios.put(`${baseUrl_notes}/${noteId}`, updatedNote)
+  return response.data
+}
 
 const editNoteTitle = async (title, noteId) => {
   const editedNote = {title}
@@ -100,11 +63,6 @@ const editNoteOrderNonFirst = async (after, noteId) => {
   return response.data
 }
 
-const deleteTab = async (tabId) => {
-  const response = await axios.delete(`${baseUrl_tabs}/${tabId}`)
-
-  return response.headers
-}
 
 const deleteNote = async (noteId) => {
   const response = await axios.delete(`${baseUrl_notes}/${noteId}`)
@@ -114,4 +72,4 @@ const deleteNote = async (noteId) => {
 
 
 
-export default { getAllTabs, getTabNotes, createNewTab, createNewTabAfter, createNewNote, editTabTitle, editTabOrderFirst,editTabOrderNonFirst, editNoteTitle, editNoteContent, editNoteParentNonRoot, editNoteParentRoot, editNoteOrderFirst, editNoteOrderNonFirst, deleteTab, deleteNote }
+export default { createNewNote, editNote, editNoteTitle, editNoteContent, editNoteParentNonRoot, editNoteParentRoot, editNoteOrderFirst, editNoteOrderNonFirst, deleteNote }

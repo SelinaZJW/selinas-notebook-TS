@@ -4,23 +4,16 @@ import { ChevronDown, ChevronRight, FileText, Folder, FilePlus, Trash2, Edit, Co
 import Tooltip from '@mui/material/Tooltip';
 import { NodeHandlers,  NodeState, TreeApi } from "react-arborist";
 import { MyData } from "./types"
-import { EditResult } from "react-arborist/dist/types";
 import useAddNote from "./backend/useAddNote";
-import useDeleteNote from "./backend/useDeleteNote";
 import useAddChildNote from "./backend/useAddChildNote";
+
+import { useDispatch } from "react-redux";
+import { addNote, deleteNote } from "../../reducers/noteReducer";
+
 
 const size = 16;
 const color = "#999";
 
-// export declare type NodeHandlers = {
-//   toggle: MouseEventHandler;
-//   select: (e: MouseEvent, args: {
-//       selectOnClick: boolean;
-//   }) => void;
-//   edit: () => Promise<EditResult>;
-//   submit: (name: string) => void;
-//   reset: () => void;
-// };
 
 export declare type NodeRendererProps<T> = {
   innerRef: (el: HTMLDivElement | null) => void;
@@ -33,6 +26,7 @@ export declare type NodeRendererProps<T> = {
   handlers: NodeHandlers;
   tree: TreeApi<T>;
   preview: boolean;
+  tabId: String
 };
 
 function Icon({ isFolder, isSelected }: any) {
@@ -104,19 +98,35 @@ export const Node = ({
   state,
   handlers,
   tree,
+  tabId
 }: NodeRendererProps<MyData>) => {
+  const dispatch = useDispatch()
   const folder = Array.isArray(data.children) && data.children?.length !== 0
   const open = state.isOpen;
   const title = data.title;
+  const noteId = data.id
   // const [showDetails, setShow] = useState(false);
 
   // function handleShowDetails () {
 
   // }
 
-  const addNote = useAddNote()   //how to find the parentId of the node in the tree
-  const addChildNote = useAddChildNote()
-  const deleteNote = useDeleteNote()
+  const handleAddNote = () => {
+
+  }
+  const handleAddChildNote = () => {
+    const newNote = {title: "", parentId: noteId}
+    dispatch(addNote("TAB-BFXV-08130", newNote))
+    console.log(tabId)
+  }
+
+  const handleDeleteNote = () => {
+    if (window.confirm("Are you sure you want to delete the note and all its content?")) {
+      console.log('delete')
+      dispatch(deleteNote(noteId)) //need feature to delete notes within notes
+    }
+  }
+
 
   return (
     <div
@@ -161,21 +171,21 @@ export const Node = ({
               </Tooltip>
                 {" "}
               <Tooltip title="add new note" arrow>
-                <button style={{ display: "inline" }} onClick={() => addNote(data.id, 'parentId')}>   
+                <button style={{ display: "inline" }} onClick={handleAddNote}>   
                 {/* need to make this add another children in the same class */}
                   <CornerDownLeft style={{ paddingTop: '2' }} size='17' />
                 </button>
               </Tooltip>
                 {" "}
               <Tooltip title="add new note" arrow>
-                <button style={{ display: "inline" }} onClick={() => addChildNote(data.id)}>   
+                <button style={{ display: "inline" }} onClick={handleAddChildNote}>   
                 {/* need to make this add another children in the same class */}
                   <FilePlus style={{ paddingTop: '2' }} size='17' />
                 </button>
               </Tooltip>
                 {" "}
               <Tooltip title="delete" arrow>
-                <button style={{ display: "inline" }} onClick={() => deleteNote(data.id)}>   
+                <button style={{ display: "inline" }} onClick={handleDeleteNote}>   
                   <Trash2 style={{ paddingTop: '2' }} size='17' />
                 </button>
               </Tooltip>

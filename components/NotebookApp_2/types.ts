@@ -5,6 +5,7 @@ export type MyData = {
   children?: MyData[];
   level: number;     //add hierarchy to database
   index?: number;
-  content?: string
+  content?: string;
+  weight: number
 };
 
