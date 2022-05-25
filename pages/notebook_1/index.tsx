@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { Content } from "../../components/NotebookApp_1/Content";
 import store from "../../components/NotebookApp_1/store"
 import { initializeTabs } from "../../reducers/tabReducer"
-import { initializeAllNotes, initializeTabNotes } from "../../reducers/noteReducer";
+import { initializeAllNotes } from "../../reducers/noteReducer";
 
 export function Main() {
   const dispatch = useDispatch()
@@ -25,7 +25,7 @@ export function Main() {
     console.log(selectedTab)
     if (selectedTab) {
       const tabId = selectedTab?.id
-      dispatch(initializeTabNotes(tabId))
+      // dispatch(initializeTabNotes(tabId))
     }
   }
 
