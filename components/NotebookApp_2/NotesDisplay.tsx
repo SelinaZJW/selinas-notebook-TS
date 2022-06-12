@@ -2,7 +2,7 @@ import React, { MouseEventHandler, ReactElement, Ref } from "react";
 // import { TreeApi } from "react-arborist";
 import { TreeApi, Tree } from "react-arborist";
 // import { EditHandler, IdObj, MoveHandler, NodeRenderer, ToggleHandler } from "react-arborist/dist/types";
-import { Node } from "./Node";
+import { mkNode } from "./Node";
 
 // export interface TreeProps<T> {
 //   children: NodeRenderer<T>;
@@ -31,6 +31,8 @@ import { Node } from "./Node";
 
 export default function NotesDisplay({backend, addRootNote, tabId}) {
   // const backend = useBackend();
+
+  const Node = mkNode(tabId)
 
   return (
     <div className="displayBox">

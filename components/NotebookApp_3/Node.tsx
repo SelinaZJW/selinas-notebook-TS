@@ -9,6 +9,7 @@ import useAddChildNote from "./backend/useAddChildNote";
 
 import { useDispatch } from "react-redux";
 import { addNote, deleteNote } from "../../reducers/noteReducer";
+import { TabId } from "../../model";
 
 
 const size = 16;
@@ -91,20 +92,20 @@ function EditForm({ defaultValue, submit, reset }: FormProps) {
 }
 
 
-export const Node = ({
+export const mkNode = (tabId: TabId) => ({
   innerRef,
   data,
   styles,
   state,
   handlers,
-  tree,
-  tabId
+  tree
 }: NodeRendererProps<MyData>) => {
   const dispatch = useDispatch()
   const folder = Array.isArray(data.children) && data.children?.length !== 0
   const open = state.isOpen;
   const title = data.title;
   const noteId = data.id
+  const parentId = data.parentId 
   // const [showDetails, setShow] = useState(false);
 
   // function handleShowDetails () {
@@ -112,12 +113,12 @@ export const Node = ({
   // }
 
   const handleAddNote = () => {
-
+    const newNote = {title: "", parentId: parentId, after: noteId}
+    dispatch(addNote(tabId, newNote))
   }
   const handleAddChildNote = () => {
     const newNote = {title: "", parentId: noteId}
-    dispatch(addNote("TAB-BFXV-08130", newNote))
-    console.log(tabId)
+    dispatch(addNote(tabId, newNote))
   }
 
   const handleDeleteNote = () => {
@@ -170,14 +171,14 @@ export const Node = ({
                 </button>
               </Tooltip>
                 {" "}
-              <Tooltip title="add new note" arrow>
+              <Tooltip title="add note after" arrow>
                 <button style={{ display: "inline" }} onClick={handleAddNote}>   
                 {/* need to make this add another children in the same class */}
                   <CornerDownLeft style={{ paddingTop: '2' }} size='17' />
                 </button>
               </Tooltip>
                 {" "}
-              <Tooltip title="add new note" arrow>
+              <Tooltip title="add child note below" arrow>
                 <button style={{ display: "inline" }} onClick={handleAddChildNote}>   
                 {/* need to make this add another children in the same class */}
                   <FilePlus style={{ paddingTop: '2' }} size='17' />
