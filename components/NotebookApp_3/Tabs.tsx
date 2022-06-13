@@ -24,8 +24,8 @@ import { DndProvider } from 'react-dnd'
 
 const Tabs_Drag = ({initData}) => {
   const dispatch = useDispatch()
-  //const [data, setData] = React.useState(initData);
-  const data = initData
+  const [data, setData] = React.useState(initData);
+  // const data = initData
   const [selectedItem, setSelectedItem] = React.useState(initData[0]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
@@ -49,16 +49,15 @@ const Tabs_Drag = ({initData}) => {
   }
 
   const addTabHandler = () => {
-    // const newItem = {
-    //   id: nanoid(),
-    //   isOpen: true,
-    //   title: "new tab",
-    //   children: [],
-    //   level: 0,  
-    //   index: data.length,
-    // };
-    // setData([...data, newItem]);
-    // setSelectedItem(newItem);
+    const newItem = {
+      isOpen: true,
+      title: "new tab",
+      children: [],
+      level: 0,  
+      index: data.length,
+    };
+    setData([...data, newItem]);
+    setSelectedItem(newItem);
 
     
 
@@ -86,7 +85,10 @@ const Tabs_Drag = ({initData}) => {
 
   const deleteTabHandler = (tabId) => {
     if (window.confirm("Are you sure you want to delete the tab and all its note content?")) {
+      const newData = data.filter(d => d.id !== tabId)
+      setData(newData)
       console.log('delete')
+
       dispatch(deleteTab(tabId))
     }
   }
@@ -139,11 +141,12 @@ const Tabs_Drag = ({initData}) => {
 
   //lag in updating, selection is a little crazy
   const onTabDrop = async (e) => {
-    //const newData = [...data];
-    //newData.splice(e.fromIndex, 1);
-    //newData.splice(e.toIndex, 0, e.itemData);
+    const newData = [...data];
+    newData.splice(e.fromIndex, 1);
+    newData.splice(e.toIndex, 0, e.itemData);
+    setData(newData);
 
-    //setData(newData);
+
 
     const tabId = e.itemData.id
     console.log(tabId)

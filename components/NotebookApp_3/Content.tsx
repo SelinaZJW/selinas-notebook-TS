@@ -28,13 +28,13 @@ export default function Content() {
 
 
 
-  // if (dataLoaded === true) {
-  //   return <Tabs_Drag initData={tabNotes} />
-  // }
+  if (dataLoaded === true) {
+    return <Tabs_Drag initData={tabNotes} />
+  }
 
   return (
       <>
-        <Tabs_Drag initData={tabNotes} />
+        Add your first tab!
       </>
     
   );
