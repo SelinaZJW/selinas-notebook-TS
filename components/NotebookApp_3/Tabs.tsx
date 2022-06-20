@@ -15,7 +15,7 @@ import NotesDisplay from './NotesDisplay';
 import DisplaySlider from './DisplaySlider'
 
 import { useDispatch } from 'react-redux';
-import { editTab, addTab, deleteTab, addNote } from "../../reducers/noteReducer"
+import { editTab, addTab, deleteTab, addRootNote } from "../../reducers/noteReducer"
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -34,16 +34,17 @@ const Tabs_Drag = ({initData}) => {
     const tabId = selectedItem?.id
     console.log(backend)
 
-    const addRootNote = () => {
+    const addRootNote2 = () => {
       const newNote = {title: "New note"}
-      dispatch(addNote(tabId, newNote))  //selected tab is wacked after updating
+      //dispatch(addNote(tabId, newNote))  //selected tab is wacked after updating
+      dispatch(addRootNote(tabId, newNote))
       // setSelectedIndex(0)
     }
 
     return (
       <>
         <DisplaySlider backend={backend} />
-        <NotesDisplay backend={backend} addRootNote={addRootNote} tabId={tabId}/>
+        <NotesDisplay backend={backend} addRootNote={addRootNote2} tabId={tabId}/>
       </>
     );
   }
@@ -154,20 +155,20 @@ const Tabs_Drag = ({initData}) => {
 
     if (e.toIndex === 0 && e.fromIndex !== e.toIndex) {
       const updatedTab = {first: true}
-      await dispatch(editTab(tabId, updatedTab))
+      dispatch(editTab(tabId, updatedTab))
       console.log("changed to first")
     }
     if (e.toIndex !== 0 && e.fromIndex > e.toIndex) {
       const afterId = e.toData[e.toIndex-1].id
       const updatedTab = {after: afterId}
-      await dispatch(editTab(tabId, updatedTab))
+      dispatch(editTab(tabId, updatedTab))
       // setSelectedItem(e.toData[e.toIndex])
       console.log(`changed to front to ${[e.toIndex]} `)
     }
     if (e.toIndex !== 0 && e.fromIndex < e.toIndex) {
       const afterId = e.toData[e.toIndex].id
       const updatedTab = {after: afterId}
-      await dispatch(editTab(tabId, updatedTab))
+      dispatch(editTab(tabId, updatedTab))
       // setSelectedItem(e.toData[e.toIndex + 1])
       console.log(`changed to later to ${[e.toIndex]} `)
     }

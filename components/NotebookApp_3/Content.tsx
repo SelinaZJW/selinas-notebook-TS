@@ -29,12 +29,18 @@ export default function Content() {
 
 
   if (dataLoaded === true) {
-    return <Tabs_Drag initData={tabNotes} />
+    return <>
+      <Tabs_Drag initData={tabNotes} />
+      <pre>
+        {JSON.stringify(tabNotes, null, 2)}
+      </pre>
+    </>
   }
 
   return (
       <>
         Add your first tab!
+        <Tabs_Drag initData={emptyDataSet} />
       </>
     
   );

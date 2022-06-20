@@ -1,6 +1,7 @@
 import notebookService from "../services/notebookService";
 import noteService from "../services/noteService";
 import tabService from "../services/tabService"
+import TreeModel from "tree-model-improved";
 
 const noteReducer = (state = [], action) => {
   switch(action.type) {
@@ -35,6 +36,31 @@ const noteReducer = (state = [], action) => {
     }
     case 'NEW_NOTE': {
       return action.data
+    }
+    case 'ADD_ROOT_NOTE': {
+      //const tabData = state.find(t => t.id == action.tabId)
+      //window.alert(JSON.stringify(state, null, 2))
+     //window.alert(JSON.stringify(action, null, 2))
+
+      const lol = {
+        children: state
+      }
+
+      const root = new TreeModel().parse(lol);
+      window.alert(JSON.stringify(root.model, null, 2))
+
+      const tabNode = root.first((n) => {
+        window.alert(JSON.stringify(n.model, null, 2))
+        return n.model.id === action.tabId
+      })
+
+      const newNode = new TreeModel().parse(action.noteData)
+
+      tabNode.addChild(newNode)
+
+      window.alert(JSON.stringify(tabNode.model, null, 2))
+
+      return [tabNode.model]
     }
     case 'DELETE_NOTE': {
       return action.data
@@ -167,6 +193,23 @@ export const addNote = (tabId, newNote) => {
     dispatch({
       type: 'NEW_NOTE',
       data: notes
+    })
+  }
+}
+
+export const addRootNote = (tabId, newNote) => {
+  return async dispatch => {
+    const newN = await noteService.createNewNote(tabId, newNote)
+    console.log(newN)
+
+    
+
+    //const notes = await getAllTabNotes()
+
+    dispatch({
+      type: 'ADD_ROOT_NOTE',
+      tabId,
+      noteData: newNote
     })
   }
 }

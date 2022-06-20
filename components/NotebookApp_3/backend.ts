@@ -85,11 +85,11 @@ export function useBackend(props: {initData: MyData}) {
         //difficult/unable to change order between files/not folders??
 
         //const newItem = new TreeModel().parse({...src.model, level: dstParent?.model.level + 1 });  //change hierarchy of moved item, how to change 
-        // const newItem = new TreeModel().parse(changeLevel(src.model, dstParent?.model.level + 1))
-        // dstParent.addChildAtIndex(newItem, dstIndex);
-        // src.drop();
+        const newItem = new TreeModel().parse(changeLevel(src.model, dstParent?.model.level + 1))
+        dstParent.addChildAtIndex(newItem, dstIndex);
+        src.drop();
       }
-      // update();
+      update();
     },
 
     onToggle: (id: string, isOpen: boolean) => {
@@ -108,10 +108,10 @@ export function useBackend(props: {initData: MyData}) {
       const noteId = node.model.id
       dispatch(editNote(noteId, updatedNote))   //selection go crazy
 
-      // if (node) {
-      //   node.model.title = title;
-      //   update();
-      // }
+      if (node) {
+        node.model.title = title;
+        update();
+      }
     },
 
     onSetDisplay: (displayLevel: number) => {
