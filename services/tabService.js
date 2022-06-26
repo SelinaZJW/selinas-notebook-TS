@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const baseUrl_tree = 'https://selinas-notes.herokuapp.com/api/v1/tree'
-const baseUrl_tabs = 'https://selinas-notes.herokuapp.com/api/v1/tabs'
+const baseUrl_tree = `/api/tree`
+const baseUrl_tabs = `/api/tabs`
 
 const getAllTabs = async () => {
   const response = await axios.get(baseUrl_tabs)

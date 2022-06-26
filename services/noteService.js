@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const baseUrl_tabs = 'https://selinas-notes.herokuapp.com/api/v1/tabs'
-const baseUrl_notes = 'https://selinas-notes.herokuapp.com/api/v1/notes'
+const baseUrl_tabs = `/api/tabs`
+const baseUrl_notes = `/api/notes`
 
 //if no parentId, is root
 //if no after, is last 
