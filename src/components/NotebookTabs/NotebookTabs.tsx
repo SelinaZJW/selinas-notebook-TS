@@ -9,20 +9,20 @@ import Tooltip from '@mui/material/Tooltip';
 // import { nanoid } from "nanoid";
 
 // import { mock_up } from './data.js';
-import Editable from './Editable';
-import { useBackend } from './backend'
-import NotesDisplay from './NotesDisplay';
-import DisplaySlider from './DisplaySlider'
+import Editable from '../../../components/NotebookView/Editable';
+import { useBackend } from '../../../components/NotebookView/backend'
+import NotesDisplay from '../../../components/NotebookView/NotesDisplay';
+import DisplaySlider from '../../../components/NotebookView/DisplaySlider'
 
 import { useDispatch } from 'react-redux';
-import { editTab, addTab, deleteTab, addRootNote } from "../../src/store/reducers/noteReducer"
+import { editTab, addTab, deleteTab, addRootNote } from "../../store/reducers/noteReducer"
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 
 // const initData = mock_upx
 
-const Tabs_Drag = ({initData}) => {
+const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
   const dispatch = useDispatch()
   const [data, setData] = React.useState(initData);
   // const data = initData
@@ -228,4 +228,4 @@ const Tabs_Drag = ({initData}) => {
   );
 }
 
-export default Tabs_Drag
+export default NotebookTabs

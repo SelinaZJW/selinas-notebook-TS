@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux'
+import React, {useEffect} from "react";
+import {useSelector, useDispatch} from 'react-redux'
 
-import Tabs_Drag from "./Tabs"
-import { initializeAllNotes } from "../../src/store/reducers/noteReducer";
+import {initializeAllNotes} from "../../store/reducers/noteReducer";
+import NotebookTabs from "../../components/NotebookTabs/NotebookTabs";
 
-
-export default function Content() {
-  const dispatch = useDispatch()
+const NotebookView: React.FC = () => {
+    const dispatch = useDispatch()
 
   useEffect(() => {
     // dispatch(initializeTabs())
@@ -30,7 +29,7 @@ export default function Content() {
 
   if (dataLoaded === true) {
     return <>
-      <Tabs_Drag initData={tabNotes} />
+      <NotebookTabs initData={tabNotes} />
       <pre>
         {JSON.stringify(tabNotes, null, 2)}
       </pre>
@@ -40,8 +39,10 @@ export default function Content() {
   return (
       <>
         Add your first tab!
-        <Tabs_Drag initData={emptyDataSet} />
+        <NotebookTabs initData={emptyDataSet} />
       </>
     
   );
 }
+
+export default NotebookView
