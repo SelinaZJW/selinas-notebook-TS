@@ -1,6 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import TreeModel from "tree-model-improved";
-import { MyData } from "./types"
+import { MyData } from "./types";
+import { useDispatch } from 'react-redux';
+import { editNote } from "../../src/store/reducers/noteReducer"
 
 function findById(node: any, id: string): TreeModel.Node<any> | null {
   return node.first((n: any) => n.model.id === id);
@@ -49,7 +51,8 @@ export function useBackend(props: {initData: MyData}) {
   const root = useMemo(() => new TreeModel().parse(data), [data]);
   const find = useCallback((id) => findById(root, id), [root]);
   const update = () => setData({ ...root.model });
-  const depth = getDataDepth(data) 
+  const depth = getDataDepth(data);
+  const dispatch = useDispatch();
   // console.log(depth)
 
   return {
@@ -62,12 +65,24 @@ export function useBackend(props: {initData: MyData}) {
     ) => {
       for (const srcId of srcIds) {
         const src = find(srcId);
-        console.log(src);
+        // console.log(src);
         const dstParent = dstParentId ? find(dstParentId) : root;
-        console.log(dstParent?.model);
-        console.log(dstIndex);
+        // console.log(dstParent?.model);
+        console.log(srcId, dstParentId, dstParent.model.level, dstIndex);
+        console.log(dstParent.model.children[dstIndex-1]?.id)
 
         if (!src || !dstParent) return;
+
+        const noteId = srcId;
+        const isRoot = dstParent.model.level === 0 ? true : false;
+        const first = dstIndex === 0 ? true : false;
+        const parentId = isRoot ? null : dstParentId;
+        const after = first ? null : dstParent.model.children[dstIndex-1]?.id
+
+        const newNote = { isRoot, parentId, first, after }  //backend not working heree sometimes??
+        console.log(newNote)
+        dispatch(editNote(noteId, newNote))     //selection go crazy again
+        //difficult/unable to change order between files/not folders??
 
         //const newItem = new TreeModel().parse({...src.model, level: dstParent?.model.level + 1 });  //change hierarchy of moved item, how to change 
         const newItem = new TreeModel().parse(changeLevel(src.model, dstParent?.model.level + 1))
@@ -88,6 +103,11 @@ export function useBackend(props: {initData: MyData}) {
 
     onEdit: (id: string, title: string) => {
       const node = find(id);
+      console.log(node.model.id, title)
+      const updatedNote = {title: title}
+      const noteId = node.model.id
+      dispatch(editNote(noteId, updatedNote))   //selection go crazy
+
       if (node) {
         node.model.title = title;
         update();
@@ -101,10 +121,6 @@ export function useBackend(props: {initData: MyData}) {
 
     onDataUpdate: () => {
       update();
-    },
-
-    onAdd: () => {
-
     }
 
   };

@@ -1,4 +1,4 @@
-import notebookService from "../services/notebookService";
+import notebookService from "../../../services/notebookService";
 
 const tabReducer = (state = [], action) => {
   switch(action.type) {

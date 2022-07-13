@@ -1,6 +1,6 @@
-import notebookService from "../services/notebookService";
-import noteService from "../services/noteService";
-import tabService from "../services/tabService"
+import notebookService from "../../../services/notebookService";
+import noteService from "../../../services/noteService";
+import tabService from "../../../services/tabService"
 import TreeModel from "tree-model-improved";
 
 const noteReducer = (state = [], action) => {
@@ -202,7 +202,6 @@ export const addRootNote = (tabId, newNote) => {
     const newN = await noteService.createNewNote(tabId, newNote)
     console.log(newN)
 
-    
 
     //const notes = await getAllTabNotes()
 

@@ -6,7 +6,7 @@ import { NodeHandlers,  NodeState, TreeApi } from "react-arborist";
 import { MyData } from "./types";
 
 import { useDispatch } from "react-redux";
-import { addNote, deleteNote } from "../../reducers/noteReducer";
+import { addNote, deleteNote } from "../../src/store/reducers/noteReducer";
 import { TabId } from "../../model";
 
 

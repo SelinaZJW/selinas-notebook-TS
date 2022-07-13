@@ -15,7 +15,7 @@ import NotesDisplay from './NotesDisplay';
 import DisplaySlider from './DisplaySlider'
 
 import { useDispatch } from 'react-redux';
-import { editTab, addTab, deleteTab, addNote } from "../../reducers/noteReducer"
+import { editTab, addTab, deleteTab, addRootNote } from "../../src/store/reducers/noteReducer"
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -24,8 +24,8 @@ import { DndProvider } from 'react-dnd'
 
 const Tabs_Drag = ({initData}) => {
   const dispatch = useDispatch()
-  //const [data, setData] = React.useState(initData);
-  const data = initData
+  const [data, setData] = React.useState(initData);
+  // const data = initData
   const [selectedItem, setSelectedItem] = React.useState(initData[0]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
@@ -34,31 +34,31 @@ const Tabs_Drag = ({initData}) => {
     const tabId = selectedItem?.id
     console.log(backend)
 
-    const addRootNote = () => {
+    const addRootNote2 = () => {
       const newNote = {title: "New note"}
-      dispatch(addNote(tabId, newNote))  //selected tab is wacked after updating
+      //dispatch(addNote(tabId, newNote))  //selected tab is wacked after updating
+      dispatch(addRootNote(tabId, newNote))
       // setSelectedIndex(0)
     }
 
     return (
       <>
         <DisplaySlider backend={backend} />
-        <NotesDisplay backend={backend} addRootNote={addRootNote} tabId={tabId}/>
+        <NotesDisplay backend={backend} addRootNote={addRootNote2} tabId={tabId}/>
       </>
     );
   }
 
   const addTabHandler = () => {
-    // const newItem = {
-    //   id: nanoid(),
-    //   isOpen: true,
-    //   title: "new tab",
-    //   children: [],
-    //   level: 0,  
-    //   index: data.length,
-    // };
-    // setData([...data, newItem]);
-    // setSelectedItem(newItem);
+    const newItem = {
+      isOpen: true,
+      title: "new tab",
+      children: [],
+      level: 0,  
+      index: data.length,
+    };
+    setData([...data, newItem]);
+    setSelectedItem(newItem);
 
     
 
@@ -86,7 +86,10 @@ const Tabs_Drag = ({initData}) => {
 
   const deleteTabHandler = (tabId) => {
     if (window.confirm("Are you sure you want to delete the tab and all its note content?")) {
+      const newData = data.filter(d => d.id !== tabId)
+      setData(newData)
       console.log('delete')
+
       dispatch(deleteTab(tabId))
     }
   }
@@ -139,11 +142,12 @@ const Tabs_Drag = ({initData}) => {
 
   //lag in updating, selection is a little crazy
   const onTabDrop = async (e) => {
-    //const newData = [...data];
-    //newData.splice(e.fromIndex, 1);
-    //newData.splice(e.toIndex, 0, e.itemData);
+    const newData = [...data];
+    newData.splice(e.fromIndex, 1);
+    newData.splice(e.toIndex, 0, e.itemData);
+    setData(newData);
 
-    //setData(newData);
+
 
     const tabId = e.itemData.id
     console.log(tabId)
@@ -151,20 +155,20 @@ const Tabs_Drag = ({initData}) => {
 
     if (e.toIndex === 0 && e.fromIndex !== e.toIndex) {
       const updatedTab = {first: true}
-      await dispatch(editTab(tabId, updatedTab))
+      dispatch(editTab(tabId, updatedTab))
       console.log("changed to first")
     }
     if (e.toIndex !== 0 && e.fromIndex > e.toIndex) {
       const afterId = e.toData[e.toIndex-1].id
       const updatedTab = {after: afterId}
-      await dispatch(editTab(tabId, updatedTab))
+      dispatch(editTab(tabId, updatedTab))
       // setSelectedItem(e.toData[e.toIndex])
       console.log(`changed to front to ${[e.toIndex]} `)
     }
     if (e.toIndex !== 0 && e.fromIndex < e.toIndex) {
       const afterId = e.toData[e.toIndex].id
       const updatedTab = {after: afterId}
-      await dispatch(editTab(tabId, updatedTab))
+      dispatch(editTab(tabId, updatedTab))
       // setSelectedItem(e.toData[e.toIndex + 1])
       console.log(`changed to later to ${[e.toIndex]} `)
     }

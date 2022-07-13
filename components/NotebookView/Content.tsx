@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 
 import Tabs_Drag from "./Tabs"
-import { initializeAllNotes } from "../../reducers/noteReducer";
+import { initializeAllNotes } from "../../src/store/reducers/noteReducer";
 
 
 export default function Content() {
