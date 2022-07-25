@@ -2,7 +2,7 @@ import React, { MouseEventHandler, ReactElement, Ref } from "react";
 // import { TreeApi } from "react-arborist";
 import { TreeApi, Tree } from "react-arborist";
 // import { EditHandler, IdObj, MoveHandler, NodeRenderer, ToggleHandler } from "react-arborist/dist/types";
-import { mkNode } from "./Node";
+import { mkNode } from "../../../components/NotebookView/Node";
 
 // export interface TreeProps<T> {
 //   children: NodeRenderer<T>;
@@ -29,7 +29,7 @@ import { mkNode } from "./Node";
 
 // export declare const Tree: <T extends IdObj>(props: TreeProps<T> & import("react").RefAttributes<TreeApi<T>>) => ReactElement<any, string | import("react").JSXElementConstructor<any>> | null;
 
-export default function NotesDisplay({backend, addRootNote, tabId}) {
+export default function NotebookDisplay({backend, addRootNote, tabId}) {
   // const backend = useBackend();
 
   const Node = mkNode(tabId)

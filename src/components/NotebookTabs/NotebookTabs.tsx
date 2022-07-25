@@ -11,10 +11,10 @@ import Tooltip from '@mui/material/Tooltip';
 // import { mock_up } from './data.js';
 import Editable from '../../../components/NotebookView/Editable';
 import { useBackend } from '../../../components/NotebookView/backend'
-import NotesDisplay from '../../../components/NotebookView/NotesDisplay';
+import NotebookDisplay from '../NotebookDisplay/NotebookDisplay';
 import DisplaySlider from '../../../components/NotebookView/DisplaySlider'
 
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { editTab, addTab, deleteTab, addRootNote } from "../../store/reducers/noteReducer"
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -24,6 +24,9 @@ import { DndProvider } from 'react-dnd'
 
 const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
   const dispatch = useDispatch()
+
+  const tabs = useSelector((state: any) => Object.values(state.tabs.data))
+
   const [data, setData] = React.useState(initData);
   // const data = initData
   const [selectedItem, setSelectedItem] = React.useState(initData[0]);
@@ -43,8 +46,11 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
 
     return (
       <>
+        <pre>
+          THIS IS TAB {tabId}
+        </pre>
         <DisplaySlider backend={backend} />
-        <NotesDisplay backend={backend} addRootNote={addRootNote2} tabId={tabId}/>
+        <NotebookDisplay backend={backend} addRootNote={addRootNote2} tabId={tabId}/>
       </>
     );
   }
@@ -206,7 +212,7 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
         
       >
         <TabPanel
-          dataSource={data}
+          dataSource={tabs}
           // height={550}
           className="tabsBox"
           

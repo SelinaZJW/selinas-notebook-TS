@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import {useSelector, useDispatch} from 'react-redux'
+import React, {useEffect, useState} from "react";
+import {useSelector, useDispatch, useStore} from 'react-redux'
 
 import {initializeAllNotes} from "../../store/reducers/noteReducer";
 import NotebookTabs from "../../components/NotebookTabs/NotebookTabs";
@@ -13,7 +13,10 @@ const NotebookView: React.FC = () => {
   }, [])
   
   // const tabs = useSelector((state: any) => state.tabs)
-  const tabNotes = useSelector((state: any) => state.notes)
+
+  const store = useStore()
+  const tabs = useSelector((state: any) => state.tabs)
+  const tabNotes = useSelector((state: any) => state.notes.data)
   // console.log(tabs)
   console.log(tabNotes)
 
@@ -29,9 +32,10 @@ const NotebookView: React.FC = () => {
 
   if (dataLoaded === true) {
     return <>
+      DATA LOADED
       <NotebookTabs initData={tabNotes} />
       <pre>
-        {JSON.stringify(tabNotes, null, 2)}
+        {JSON.stringify(store.getState(), null, 2)}
       </pre>
     </>
   }
