@@ -6,8 +6,8 @@ import { NodeHandlers,  NodeState, TreeApi } from "react-arborist";
 import { MyData } from "./types";
 
 import { useDispatch } from "react-redux";
-import { addNote, deleteNote } from "../../src/store/reducers/noteReducer";
-import { TabId } from "../../model";
+import { createNote, deleteNote } from "../../src/store/reducers/noteReducer";
+import { TabId } from "../../src/model";
 
 
 const size = 16;
@@ -112,11 +112,11 @@ export const mkNode = (tabId: TabId) => ({
 
   const handleAddNote = () => {
     const newNote = {title: "", parentId: parentId, after: noteId}
-    dispatch(addNote(tabId, newNote))
+    dispatch(createNote(tabId, newNote))
   }
   const handleAddChildNote = () => {
     const newNote = {title: "", parentId: noteId}
-    dispatch(addNote(tabId, newNote))
+    dispatch(createNote(tabId, newNote))
   }
 
   const handleDeleteNote = () => {

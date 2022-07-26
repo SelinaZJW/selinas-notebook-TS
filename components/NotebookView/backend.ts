@@ -1,15 +1,15 @@
-import { useCallback, useMemo, useState } from "react";
+import {useCallback, useMemo, useState} from "react";
 import TreeModel from "tree-model-improved";
-import { MyData } from "./types";
-import { useDispatch } from 'react-redux';
-import { editNote } from "../../src/store/reducers/noteReducer"
+import {MyData} from "./types";
+import {useDispatch} from 'react-redux';
+import {editNote} from "../../src/store/actions/editNote";
 
 function findById(node: any, id: string): TreeModel.Node<any> | null {
   return node.first((n: any) => n.model.id === id);
 }
 
 
-function changeLevel(dataNode: MyData, parentLevel: number): MyData  {
+export function changeLevel(dataNode: MyData, parentLevel: number): MyData  {
   dataNode.level = parentLevel;
   if (dataNode.children) {
     dataNode.children = dataNode.children.map((child:any) => ({...child, level: dataNode.level +1}));

@@ -1,11 +1,16 @@
-import React, { MouseEventHandler, ReactElement, Ref } from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 // import { TreeApi } from "react-arborist";
-import { TreeApi, Tree } from "react-arborist";
+import {Tree, TreeApi} from "react-arborist";
 // import { EditHandler, IdObj, MoveHandler, NodeRenderer, ToggleHandler } from "react-arborist/dist/types";
-import { mkNode } from "../../../components/NotebookView/Node";
-import {useSelector} from "react-redux";
+import {mkNode} from "../../../components/NotebookView/Node";
+import {connect, useDispatch} from "react-redux";
 import {RootState} from "../../store/store";
-import {TabId} from "../../../model";
+import {NodeId, TabId} from "../../model";
+import {editNoteTitle} from "../../store/actions/editNoteTitle";
+import {bindActionCreators} from "redux";
+import {addRootNote} from "../../store/actions/addRootNote";
+import {MyData} from "../../../components/NotebookView/types";
+import {moveNotes} from "../../store/actions/moveNotes";
 
 // export interface TreeProps<T> {
 //   children: NodeRenderer<T>;
@@ -32,48 +37,95 @@ import {TabId} from "../../../model";
 
 // export declare const Tree: <T extends IdObj>(props: TreeProps<T> & import("react").RefAttributes<TreeApi<T>>) => ReactElement<any, string | import("react").JSXElementConstructor<any>> | null;
 
-export default function NotebookDisplay({backend, addRootNote, tabId}) {
-  // const backend = useBackend();
+const selectTabData = (tabId: TabId) => (state: RootState) => {
+  const tabData = state.tabs.data[tabId]
+  const noteTree = state.notes.data[tabId]
+
+  return {
+    id: tabId,
+    title: tabData?.title,
+    level: 0,
+    weight: 0,
+    children: noteTree
+  }
+}
+
+const NotebookDisplay = ({tabId, selectTabData, addRootNote, editNoteTitle, moveNotes}) => {
+  console.log("#NotebookDisplay")
+
+  const dispatch = useDispatch()
 
   const Node = mkNode(tabId)
 
-  const selectTabData = (tabId: TabId) => (state: RootState) => {
+  const treeApi = useRef<TreeApi>()
 
-    const tabData = state.tabs.data[tabId]
-    const noteTree = state.notes.data[tabId]
+  const tabData = selectTabData(tabId)
 
-    return {
-      id: tabId,
-      title: tabData?.title,
-      children: noteTree
-    }
+  // const backend = useBackend({initData: tabData})
+
+  const [editingId, setEditingId] = useState<NodeId>(undefined)
+
+  useEffect(() => {
+    console.log("editingId", editingId)
+
+    if(!editingId) return
+
+    treeApi.current.edit(editingId).then(value => {
+      // window.alert(value)
+    }).catch(onrejected => {
+      window.alert(onrejected)
+    })
+  }, [treeApi, editingId])
+
+
+  const addRootNoteClicked = () => {
+    addRootNote(tabId, setEditingId)
   }
 
-  const tabData = useSelector(selectTabData(tabId))
+  const [toggleMap, setToggleMap] = useState<{[id: string]: boolean}>({})
+  const isOpen = useMemo(
+      () => (data: MyData) => {
+        if(data.level == 0) return true;
+
+        return toggleMap[data.id] || false
+      }, [toggleMap]
+  )
+  function handleToggle(id: string, isOpen: boolean) {
+    // window.alert(`Toggling ${id} to ${isOpen}`)
+
+    setToggleMap({
+      ...toggleMap,
+      [id]: isOpen
+    })
+  }
 
   return (
     <div className="displayBox">
-    <button onClick={addRootNote}>
+    <button onClick={addRootNoteClicked}>
       add
     </button>
+     {/* <pre>
+        {JSON.stringify(toggleMap, null, 2)}
+      </pre>*/}
     <Tree
       ref={(tree: TreeApi) => {
         // @ts-ignore
         global.tree = tree;
+        treeApi.current = tree
       }}
 
       className="notes"
       data={tabData}
       getChildren="children"
-      isOpen="isOpen"
+      isOpen={isOpen}
       width={700}
       height={490}
       // disableDrop={(d) => d.name === "House Arryn"}
       hideRoot
       indent={24}
-      onMove={backend?.onMove}
-      onToggle={backend?.onToggle}
-      onEdit={backend?.onEdit}
+      onMove={(dragIds, parentId, index) => moveNotes(tabId, dragIds, parentId, index)}
+      onToggle={handleToggle}
+      onEdit={(id, title) => editNoteTitle(tabId, id, title)}
       rowHeight={22}
       onClick={() => console.log("clicked the tree")}
       onContextMenu={() => console.log("context menu the tree")}
@@ -81,10 +133,27 @@ export default function NotebookDisplay({backend, addRootNote, tabId}) {
     >
       {Node}
     </Tree>
+      tabId: {tabId}
+      Editing: {editingId}
       <pre>
-        tabId: {tabId}
         {JSON.stringify(tabData, null, 2)}
-      </pre>
+       </pre>
     </div>
   );
 }
+
+const mapStateToProps = state => {
+  return {
+    selectTabData: tabId => selectTabData(tabId)(state)
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    addRootNote,
+    editNoteTitle,
+    moveNotes
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotebookDisplay)

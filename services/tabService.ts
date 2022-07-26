@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {ITab, ITreeNode, TabId} from "../model";
+import {ITab, ITreeNode, TabId} from "../src/model";
 import {TabbedItem} from "devextreme-react/form";
 
 const baseUrl_tree = `/api/tree`

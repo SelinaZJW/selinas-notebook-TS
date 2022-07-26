@@ -1,4 +1,4 @@
-import {INote, ITab, ITreeNode, TabId} from "../../../model";
+import {INote, ITab, ITreeNode, TabId} from "../../model";
 
 
 export type TabsState = {
@@ -22,5 +22,7 @@ export type NotesState = {
 }
 
 export type NoteAction =
-    | { type: "INIT_NOTES"; children: INote[] }
-    | { type: "INIT_TAB_NOTES"; tabId: TabId, rootNodes: ITreeNode[] }
+    // | { type: "INIT_NOTES"; children: INote[] }
+    | { type: "SET_TAB_NOTES"; tabId: TabId, rootNodes: ITreeNode[] }
+    | { type: "ADD_ROOT_NOTE"; tabId: TabId, rootNode: ITreeNode }
+    | { type: "SET_NOTE"; tabId: TabId, noteData: INote }

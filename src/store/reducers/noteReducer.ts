@@ -2,7 +2,9 @@ import notebookService from "../../../services/notebookService";
 import noteService from "../../../services/noteService";
 import tabService from "../../../services/tabService"
 import {NoteAction, NotesState} from "../types";
-import {ITab} from "../../../model";
+import {ITab, ITreeNode} from "../../model";
+import TreeModel from "tree-model-improved";
+import {getTabNotes} from "../actions/getTabNotes";
 
 const initialState: NotesState = {
     data: {},
@@ -11,10 +13,7 @@ const initialState: NotesState = {
 
 const noteReducer = (state: NotesState = initialState, action: NoteAction) => {
     switch (action.type) {
-        case 'INIT_NOTES': {
-            return state
-        }
-        case 'INIT_TAB_NOTES': {
+        case 'SET_TAB_NOTES': {
             return {
                 ...state,
                 data: {
@@ -44,6 +43,35 @@ const noteReducer = (state: NotesState = initialState, action: NoteAction) => {
         /*    case 'NEW_NOTE': {
               return action.data
             }*/
+        case 'ADD_ROOT_NOTE': {
+            const rootNodes = state.data[action.tabId]
+
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    [action.tabId]: [...rootNodes, action.rootNode]
+                },
+            }
+        }
+        case 'SET_NOTE': {
+            console.log('SET_NOTE', action.tabId, action.noteData)
+
+            const rootNodes: any[] = state.data[action.tabId]
+
+            const treeModel = new TreeModel().parse({children: rootNodes})
+            const node = treeModel.first((n) => n.model.id === action.noteData.id);
+
+            node.model.title = action.noteData.title
+
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    [action.tabId]: rootNodes
+                },
+            }
+        }
         /*    case 'ADD_ROOT_NOTE': {
               //const tabData = state.find(t => t.id == action.tabId)
               //window.alert(JSON.stringify(state, null, 2))
@@ -89,7 +117,7 @@ const noteReducer = (state: NotesState = initialState, action: NoteAction) => {
 //   } 
 // }
 
-const getAllTabNotes = async () => {
+/*const getAllTabNotes = async () => {
     const tabs = await tabService.getAllTabs()
     const tabIds = tabs.map(t => t.id)
     const notes = await Promise.all(tabIds.map(async (tabId) => {
@@ -98,7 +126,7 @@ const getAllTabNotes = async () => {
     }))
 
     return notes
-}
+}*/
 
 export const initializeAllNotes = () => {
     return async dispatch => {
@@ -112,11 +140,8 @@ export const initializeAllNotes = () => {
 
             tabs.map(tab => {
                 tabService.getTabNotes(tab.id).then(tabTree => {
-
-
-
                         return dispatch({
-                            type: 'INIT_TAB_NOTES',
+                            type: 'SET_TAB_NOTES',
                             tabId: tab.id,
                             rootNodes: tabTree.children
                         })
@@ -174,12 +199,12 @@ export const addTab = (title, after?) => {
         //   const tabNotes = await tabService.getTabNotes(tabId)
         //   return tabNotes
         // }))
-        const notes = await getAllTabNotes()
+        // const notes = await getAllTabNotes()
 
-        dispatch({
+        /*dispatch({
             type: 'NEW_TAB',
             data: notes
-        })
+        })*/
     }
 }
 
@@ -187,72 +212,42 @@ export const deleteTab = (tabId) => {
     return async dispatch => {
         await notebookService.deleteTab(tabId)
 
-        const notes = await getAllTabNotes()
-
         dispatch({
             type: 'DELETE_TAB',
-            data: notes
+            tabId
         })
     }
 }
 
 
-export const editNote = (noteId, updatedNote) => {
-    return async dispatch => {
-        const editedNote = await noteService.editNote(noteId, updatedNote)
-        console.log(editedNote)
-        // const tabId = editedNote.tabId
-        // const updatedTabNotes = await notebookService.getTabNotes(tabId)
 
-        const notes = await getAllTabNotes()
 
-        dispatch({
-            type: 'EDIT_NOTE',
-            data: notes
-        })
-    }
-}
-
-export const addNote = (tabId, newNote) => {
+export const createNote = (tabId, newNote) => {
     return async dispatch => {
         const newN = await noteService.createNewNote(tabId, newNote)
         console.log(newN)
 
-        const notes = await getAllTabNotes()
-
-        dispatch({
-            type: 'NEW_NOTE',
-            data: notes
-        })
+        tabService.getTabNotes(tabId).then(tabTree => {
+                return dispatch({
+                    type: 'SET_TAB_NOTES',
+                    tabId,
+                    rootNodes: tabTree.children
+                })
+            }
+        )
     }
 }
 
-export const addRootNote = (tabId, newNote) => {
-    return async dispatch => {
-        const newN = await noteService.createNewNote(tabId, newNote)
-        console.log(newN)
 
-
-        //const notes = await getAllTabNotes()
-
-        dispatch({
-            type: 'ADD_ROOT_NOTE',
-            tabId,
-            noteData: newNote
-        })
-    }
-}
 
 export const deleteNote = (noteId) => {
     return async dispatch => {
         await noteService.deleteNote(noteId)
 
-        const notes = await getAllTabNotes()
-
-        dispatch({
+        /*dispatch({
             type: 'DELETE_NOTE',
             data: notes
-        })
+        })*/
     }
 }
 

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import {ICreateTab, ITab} from "../model"
+import {ICreateTab, ITab} from "../src/model"
 
 const baseUrl_tree = `/api/tree`
 const baseUrl_tabs = `/api/tabs`

@@ -1,26 +1,38 @@
 import React from 'react';
-import { Button } from '@mui/material';
-import { Sortable } from 'devextreme-react/sortable';
+import {Button} from '@mui/material';
+import {Sortable} from 'devextreme-react/sortable';
 import TabPanel from 'devextreme-react/tab-panel';
 import 'devextreme/data/odata/store';
 import 'devextreme/dist/css/dx.light.css';
-import { Plus, Trash2 } from 'react-feather'
+import {Plus, Trash2} from 'react-feather'
 import Tooltip from '@mui/material/Tooltip';
 // import { nanoid } from "nanoid";
-
 // import { mock_up } from './data.js';
 import Editable from '../../../components/NotebookView/Editable';
-import { useBackend } from '../../../components/NotebookView/backend'
 import NotebookDisplay from '../NotebookDisplay/NotebookDisplay';
-import DisplaySlider from '../../../components/NotebookView/DisplaySlider'
 
 import {useDispatch, useSelector} from 'react-redux';
-import { editTab, addTab, deleteTab, addRootNote } from "../../store/reducers/noteReducer"
+import {addTab, deleteTab, editTab} from "../../store/reducers/noteReducer"
 
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { DndProvider } from 'react-dnd'
+import {HTML5Backend} from 'react-dnd-html5-backend'
+import {DndProvider} from 'react-dnd'
 
 // const initData = mock_upx
+
+const NotesTemplate = (props) => {
+  const tabId = props.data.id
+
+  return (
+      <>
+        <pre>
+          THIS IS TAB {tabId}
+        </pre>
+        {/*<DisplaySlider backend={backend} />*/}
+        <NotebookDisplay tabId={tabId}/>
+        {/*{JSON.stringify(backend.data, null ,2)}*/}
+      </>
+  );
+}
 
 const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
   const dispatch = useDispatch()
@@ -32,33 +44,7 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
   const [selectedItem, setSelectedItem] = React.useState(initData[0]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
-  const NotesTemplate = (props) => {
-    const backend = useBackend({initData: props.data})
-    // const tabId = selectedItem?.id
 
-
-    const tabId = props.data.id
-
-    console.log(backend)
-
-    const addRootNote2 = () => {
-      const newNote = {title: "New note"}
-      //dispatch(addNote(tabId, newNote))  //selected tab is wacked after updating
-      dispatch(addRootNote(tabId, newNote))
-      // setSelectedIndex(0)
-    }
-
-    return (
-      <>
-        <pre>
-          THIS IS TAB {tabId}
-        </pre>
-        <DisplaySlider backend={backend} />
-        <NotebookDisplay backend={backend} addRootNote={addRootNote2} tabId={tabId}/>
-        {JSON.stringify(backend.data, null ,2)}
-      </>
-    );
-  }
 
   const addTabHandler = () => {
     const newItem = {
