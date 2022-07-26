@@ -15,7 +15,7 @@ export type TabAction =
     // | { type: "SET_LINE_QTY"; lineId: LineId; qty: Quantity }
 
 export type NotesState = {
-    data: {[key: TabId]: ITreeNode}
+    data: {[key: TabId]: ITreeNode[]}
     loading: 'idle' | 'pending'
     currentRequestId: string | undefined
     error: any

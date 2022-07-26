@@ -34,7 +34,11 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
 
   const NotesTemplate = (props) => {
     const backend = useBackend({initData: props.data})
-    const tabId = selectedItem?.id
+    // const tabId = selectedItem?.id
+
+
+    const tabId = props.data.id
+
     console.log(backend)
 
     const addRootNote2 = () => {
@@ -51,6 +55,7 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
         </pre>
         <DisplaySlider backend={backend} />
         <NotebookDisplay backend={backend} addRootNote={addRootNote2} tabId={tabId}/>
+        {JSON.stringify(backend.data, null ,2)}
       </>
     );
   }

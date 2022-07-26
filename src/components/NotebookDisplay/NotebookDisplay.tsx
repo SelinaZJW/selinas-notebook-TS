@@ -3,6 +3,9 @@ import React, { MouseEventHandler, ReactElement, Ref } from "react";
 import { TreeApi, Tree } from "react-arborist";
 // import { EditHandler, IdObj, MoveHandler, NodeRenderer, ToggleHandler } from "react-arborist/dist/types";
 import { mkNode } from "../../../components/NotebookView/Node";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/store";
+import {TabId} from "../../../model";
 
 // export interface TreeProps<T> {
 //   children: NodeRenderer<T>;
@@ -33,20 +36,34 @@ export default function NotebookDisplay({backend, addRootNote, tabId}) {
   // const backend = useBackend();
 
   const Node = mkNode(tabId)
-  
+
+  const selectTabData = (tabId: TabId) => (state: RootState) => {
+
+    const tabData = state.tabs.data[tabId]
+    const noteTree = state.notes.data[tabId]
+
+    return {
+      id: tabId,
+      title: tabData?.title,
+      children: noteTree
+    }
+  }
+
+  const tabData = useSelector(selectTabData(tabId))
+
   return (
     <div className="displayBox">
     <button onClick={addRootNote}>
-      add 
+      add
     </button>
     <Tree
       ref={(tree: TreeApi) => {
         // @ts-ignore
         global.tree = tree;
       }}
-      
+
       className="notes"
-      data={backend?.data}
+      data={tabData}
       getChildren="children"
       isOpen="isOpen"
       width={700}
@@ -63,7 +80,11 @@ export default function NotebookDisplay({backend, addRootNote, tabId}) {
       // tabId={tabId}
     >
       {Node}
-    </Tree>  
+    </Tree>
+      <pre>
+        tabId: {tabId}
+        {JSON.stringify(tabData, null, 2)}
+      </pre>
     </div>
   );
 }

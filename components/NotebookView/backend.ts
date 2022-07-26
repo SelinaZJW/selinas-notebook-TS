@@ -102,6 +102,7 @@ export function useBackend(props: {initData: MyData}) {
     },
 
     onEdit: (id: string, title: string) => {
+      console.log("onEdit", root)
       const node = find(id);
       console.log(node.model.id, title)
       const updatedNote = {title: title}
