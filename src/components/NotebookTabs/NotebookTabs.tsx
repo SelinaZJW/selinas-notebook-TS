@@ -37,8 +37,6 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
   const [selectedItem, setSelectedItem] = React.useState(initData[0]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
-
-
   const addTabHandler = () => {
     const newItem = {
       isOpen: true,
