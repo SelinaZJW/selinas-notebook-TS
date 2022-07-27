@@ -6,8 +6,6 @@ import 'devextreme/data/odata/store';
 import 'devextreme/dist/css/dx.light.css';
 import {Plus, Trash2} from 'react-feather'
 import Tooltip from '@mui/material/Tooltip';
-// import { nanoid } from "nanoid";
-// import { mock_up } from './data.js';
 import Editable from '../../../components/NotebookView/Editable';
 import NotebookDisplay from '../NotebookDisplay/NotebookDisplay';
 
@@ -16,19 +14,14 @@ import {addTab, deleteTab, editTab} from "../../store/reducers/noteReducer"
 
 import {HTML5Backend} from 'react-dnd-html5-backend'
 import {DndProvider} from 'react-dnd'
-
-// const initData = mock_upx
+import DisplaySlider from "../../../components/NotebookView/DisplaySlider";
 
 const NotesTemplate = (props) => {
   const tabId = props.data.id
 
   return (
       <>
-        <pre>
-          THIS IS TAB {tabId}
-        </pre>
-        {/*<DisplaySlider backend={backend} />*/}
-        <NotebookDisplay tabId={tabId}/>
+        <NotebookDisplay tabId={tabId} />
         {/*{JSON.stringify(backend.data, null ,2)}*/}
       </>
   );

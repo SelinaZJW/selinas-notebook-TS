@@ -1,21 +1,60 @@
 import * as React from 'react';
+import {useMemo} from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
-import { AlignLeft } from 'react-feather';
-import { Button } from '@mui/material';
+import {AlignLeft} from 'react-feather';
+import {Button} from '@mui/material';
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
+import {selectTabData} from "../../src/store/selectors/selectTabData";
+import {MyData} from "./types";
 
+function getDataDepth(dataNode: MyData): number {
+  return (Array.isArray(dataNode.children) && dataNode.children?.length !== 0) ?
+      1 + Math.max(0, ...dataNode.children.map(getDataDepth)) :
+      0;
+}
 
-export default function DisplaySlider({backend}) {
+function changeDisplay (dataNode: MyData, displayLevel: number, toggleMap): MyData {
+  // dataNode.isOpen = true;
+  // console.log(dataNode.level, displayLevel)
+  if (dataNode.level < displayLevel) {
+    // dataNode.isOpen = true;
+    toggleMap[dataNode.id] = true
+  }
+  if (dataNode.level >= displayLevel) {
+    // dataNode.isOpen = false;
+    toggleMap[dataNode.id] = false
+  }
+  if (dataNode.children) {
+    dataNode.children.forEach(child => changeDisplay(child, displayLevel, toggleMap));
+  }
+
+  // console.log(dataNode)
+  return dataNode;
+}
+
+const DisplaySlider = ({tabId, selectTabData, setToggleMap}) => {
+  const tabData: MyData = selectTabData(tabId)
+
   const [level, setLevel] = React.useState<number>( 1 );
+  const maxDepth = useMemo(() => {
+    return getDataDepth(tabData)
+  }, [tabData])
 
   const handleSliderChange = (event: Event, newLevel: number) => {
     setLevel(newLevel);
   };
 
   function handleSetDisplay() {
-    backend.onSetDisplay(level);  
+    let toggleMap = {}
+
+    changeDisplay(tabData, level, toggleMap)
+    setToggleMap(toggleMap)
+    // dispatch()
+    // backend.onSetDisplay(level);
   }
 
 
@@ -40,12 +79,12 @@ export default function DisplaySlider({backend}) {
             step={1}
             marks={true}
             min={1}
-            max={backend.depth}
+            max={maxDepth}
           />
         </Grid>
         <Grid item>
           <Typography id="display-slider" gutterBottom>
-            display {level} of {backend.depth} levels
+            display {level} of {maxDepth} levels
           </Typography>
          
         </Grid>
@@ -59,3 +98,17 @@ export default function DisplaySlider({backend}) {
     </>
   );
 }
+
+const mapStateToProps = state => {
+  return {
+    selectTabData: tabId => selectTabData(tabId)(state)
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DisplaySlider)

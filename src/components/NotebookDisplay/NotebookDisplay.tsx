@@ -11,6 +11,8 @@ import {bindActionCreators} from "redux";
 import {addRootNote} from "../../store/actions/addRootNote";
 import {MyData} from "../../../components/NotebookView/types";
 import {moveNotes} from "../../store/actions/moveNotes";
+import {selectTabData} from "../../store/selectors/selectTabData";
+import DisplaySlider from "../../../components/NotebookView/DisplaySlider";
 
 // export interface TreeProps<T> {
 //   children: NodeRenderer<T>;
@@ -37,23 +39,8 @@ import {moveNotes} from "../../store/actions/moveNotes";
 
 // export declare const Tree: <T extends IdObj>(props: TreeProps<T> & import("react").RefAttributes<TreeApi<T>>) => ReactElement<any, string | import("react").JSXElementConstructor<any>> | null;
 
-const selectTabData = (tabId: TabId) => (state: RootState) => {
-  const tabData = state.tabs.data[tabId]
-  const noteTree = state.notes.data[tabId]
-
-  return {
-    id: tabId,
-    title: tabData?.title,
-    level: 0,
-    weight: 0,
-    children: noteTree
-  }
-}
-
 const NotebookDisplay = ({tabId, selectTabData, addRootNote, editNoteTitle, moveNotes}) => {
   console.log("#NotebookDisplay")
-
-  const dispatch = useDispatch()
 
   const Node = mkNode(tabId)
 
@@ -70,11 +57,7 @@ const NotebookDisplay = ({tabId, selectTabData, addRootNote, editNoteTitle, move
 
     if(!editingId) return
 
-    treeApi.current.edit(editingId).then(value => {
-      // window.alert(value)
-    }).catch(onrejected => {
-      window.alert(onrejected)
-    })
+    treeApi.current.edit(editingId)
   }, [treeApi, editingId])
 
 
@@ -83,28 +66,47 @@ const NotebookDisplay = ({tabId, selectTabData, addRootNote, editNoteTitle, move
   }
 
   const [toggleMap, setToggleMap] = useState<{[id: string]: boolean}>({})
-  const isOpen = useMemo(
+
+  const isOpen = (data: MyData) => {
+        if(data.level == 0) return true;
+
+        return toggleMap[data.id] || false
+      }
+
+
+/*  const isOpen = useMemo(
       () => (data: MyData) => {
         if(data.level == 0) return true;
 
         return toggleMap[data.id] || false
       }, [toggleMap]
-  )
-  function handleToggle(id: string, isOpen: boolean) {
-    // window.alert(`Toggling ${id} to ${isOpen}`)
+  )*/
+  const handleToggle = (id: string, isOpen: boolean) => {
+    console.log("toggleMap", toggleMap)
+    console.log(`Toggling ${id} to ${isOpen}`)
 
     setToggleMap({
       ...toggleMap,
       [id]: isOpen
     })
   }
+/*  const handleToggle = useMemo(()=>(id: string, isOpen: boolean) =>{
+    console.log("toggleMap", toggleMap)
+    console.log(`Toggling ${id} to ${isOpen}`)
 
-  return (
+    setToggleMap({
+      ...toggleMap,
+      [id]: isOpen
+    })
+  },[toggleMap, setToggleMap])*/
+
+  return (<>
+    <DisplaySlider tabId={tabId} setToggleMap={setToggleMap} />
     <div className="displayBox">
     <button onClick={addRootNoteClicked}>
       add
     </button>
-     {/* <pre>
+{/*      <pre>
         {JSON.stringify(toggleMap, null, 2)}
       </pre>*/}
     <Tree
@@ -133,13 +135,13 @@ const NotebookDisplay = ({tabId, selectTabData, addRootNote, editNoteTitle, move
     >
       {Node}
     </Tree>
-      tabId: {tabId}
+      {/*tabId: {tabId}
       Editing: {editingId}
       <pre>
         {JSON.stringify(tabData, null, 2)}
-       </pre>
+       </pre>*/}
     </div>
-  );
+  </>);
 }
 
 const mapStateToProps = state => {

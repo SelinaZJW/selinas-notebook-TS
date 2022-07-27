@@ -34,9 +34,9 @@ const NotebookView: React.FC = () => {
     return <>
       DATA LOADED
       <NotebookTabs initData={tabNotes} />
-      <pre>
+      {/*<pre>
         {JSON.stringify(store.getState(), null, 2)}
-      </pre>
+      </pre>*/}
     </>
   }
 
