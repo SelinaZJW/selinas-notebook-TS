@@ -1,7 +1,7 @@
 import {TabId} from "../../model";
 import {RootState} from "../store";
 
-export const selectTabData = (tabId: TabId) => (state: RootState) => {
+export const selectTabTree = (tabId: TabId) => (state: RootState) => {
     const tabData = state.tabs.data[tabId]
     const noteTree = state.notes.data[tabId]
 

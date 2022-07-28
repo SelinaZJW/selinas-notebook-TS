@@ -2,6 +2,7 @@ import TreeModel from "tree-model-improved";
 import {changeLevel} from "../../../components/NotebookView/backend";
 import {TabId} from "../../model";
 import {editNote} from "./editNote";
+import {selectTabTree} from "../selectors/selectTabTree";
 
 function findById(node: any, id: string): TreeModel.Node<any> | null {
     return node.first((n: any) => n.model.id === id);
@@ -18,8 +19,9 @@ export const moveNotes = (
     return async (dispatch, getState) => {
         console.log(`moveNotes: ${srcIds}`)
 
-        const rootNotes = getState().notes.data[tabId]
-        const root = new TreeModel().parse({children: rootNotes})
+        const tabRoot = selectTabTree(tabId)(getState())
+        console.log(`tabRoot`, tabRoot)
+        const root = new TreeModel().parse(tabRoot)
         // const node = root.first((n) => n.model.id === id);
 
         const dstParent = dstParentId ? findById(root, dstParentId) : root;

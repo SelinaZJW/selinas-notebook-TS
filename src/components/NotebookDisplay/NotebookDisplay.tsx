@@ -11,7 +11,7 @@ import {bindActionCreators} from "redux";
 import {addRootNote} from "../../store/actions/addRootNote";
 import {MyData} from "../../../components/NotebookView/types";
 import {moveNotes} from "../../store/actions/moveNotes";
-import {selectTabData} from "../../store/selectors/selectTabData";
+import {selectTabTree} from "../../store/selectors/selectTabTree";
 import DisplaySlider from "../../../components/NotebookView/DisplaySlider";
 
 // export interface TreeProps<T> {
@@ -146,7 +146,7 @@ const NotebookDisplay = ({tabId, selectTabData, addRootNote, editNoteTitle, move
 
 const mapStateToProps = state => {
   return {
-    selectTabData: tabId => selectTabData(tabId)(state)
+    selectTabData: tabId => selectTabTree(tabId)(state)
   };
 };
 

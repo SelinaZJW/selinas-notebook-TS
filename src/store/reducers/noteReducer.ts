@@ -168,56 +168,9 @@ export const initializeAllNotes = () => {
     }
 }
 
-export const editTab = (tabId, updatedTab) => {
-    return async dispatch => {
-        const editedTab = await tabService.editTab(tabId, updatedTab)
-        console.log(editedTab)
 
-        const tabs = await tabService.getAllTabs()
-        const tabIds = tabs.map(t => t.id)
-        const notes = await Promise.all(tabIds.map(async (tabId) => {
-            const tabNotes = await tabService.getTabNotes(tabId)
-            return tabNotes
-        }))
-        // const notes = getAllTabNotes()
 
-        dispatch({
-            type: 'EDIT_TAB',
-            data: notes
-        })
-    }
-}
 
-export const addTab = (title, after?) => {
-    return async dispatch => {
-        const newTab = await tabService.createNewTabAfter(title, after)
-        console.log(newTab)
-
-        // const tabs = await tabService.getAllTabs()
-        // const tabIds = tabs.map(t => t.id)
-        // const notes = await Promise.all(tabIds.map(async (tabId) => {
-        //   const tabNotes = await tabService.getTabNotes(tabId)
-        //   return tabNotes
-        // }))
-        // const notes = await getAllTabNotes()
-
-        /*dispatch({
-            type: 'NEW_TAB',
-            data: notes
-        })*/
-    }
-}
-
-export const deleteTab = (tabId) => {
-    return async dispatch => {
-        await notebookService.deleteTab(tabId)
-
-        dispatch({
-            type: 'DELETE_TAB',
-            tabId
-        })
-    }
-}
 
 
 

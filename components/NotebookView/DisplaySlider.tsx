@@ -8,7 +8,7 @@ import {AlignLeft} from 'react-feather';
 import {Button} from '@mui/material';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {selectTabData} from "../../src/store/selectors/selectTabData";
+import {selectTabTree} from "../../src/store/selectors/selectTabTree";
 import {MyData} from "./types";
 
 function getDataDepth(dataNode: MyData): number {
@@ -101,7 +101,7 @@ const DisplaySlider = ({tabId, selectTabData, setToggleMap}) => {
 
 const mapStateToProps = state => {
   return {
-    selectTabData: tabId => selectTabData(tabId)(state)
+    selectTabData: tabId => selectTabTree(tabId)(state)
   };
 };
 

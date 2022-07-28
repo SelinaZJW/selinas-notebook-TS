@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Button} from '@mui/material';
 import {Sortable} from 'devextreme-react/sortable';
 import TabPanel from 'devextreme-react/tab-panel';
@@ -9,12 +9,15 @@ import Tooltip from '@mui/material/Tooltip';
 import Editable from '../../../components/NotebookView/Editable';
 import NotebookDisplay from '../NotebookDisplay/NotebookDisplay';
 
-import {useDispatch, useSelector} from 'react-redux';
-import {addTab, deleteTab, editTab} from "../../store/reducers/noteReducer"
+import {connect, useSelector} from 'react-redux';
 
 import {HTML5Backend} from 'react-dnd-html5-backend'
 import {DndProvider} from 'react-dnd'
-import DisplaySlider from "../../../components/NotebookView/DisplaySlider";
+import {selectTabTree} from "../../store/selectors/selectTabTree";
+import {bindActionCreators} from "redux";
+import {addTab} from "../../store/actions/addTab";
+import {editTab} from "../../store/actions/editTab";
+import {deleteTab} from "../../store/actions/deleteTab";
 
 const NotesTemplate = (props) => {
   const tabId = props.data.id
@@ -27,14 +30,18 @@ const NotesTemplate = (props) => {
   );
 }
 
-const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
-  const dispatch = useDispatch()
-
+const NotebookTabs: React.FC<any> = ({addTab, editTab, deleteTab}) => {
   const tabs = useSelector((state: any) => Object.values(state.tabs.data))
 
-  const [data, setData] = React.useState(initData);
-  // const data = initData
-  const [selectedItem, setSelectedItem] = React.useState(initData[0]);
+  const [data, setData] = React.useState([]);
+
+  useEffect(() => {
+    if(data.length == tabs.length) return;
+
+    setData(tabs)
+  }, [tabs])
+
+  const [selectedItem, setSelectedItem] = React.useState(tabs[0]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const addTabHandler = () => {
@@ -42,43 +49,28 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
       isOpen: true,
       title: "new tab",
       children: [],
-      level: 0,  
+      level: 0,
       index: data.length,
     };
-    setData([...data, newItem]);
-    setSelectedItem(newItem);
 
-    
+    addTab("new tab").then(newTab => {
+      setData([...data, newTab]);
+      setSelectedItem(newTab);
+    })
 
-    // dispatch(addTab("new tab", selectedItem?.id)) 
-    dispatch(addTab("new tab"))
+
+    // dispatch(addTab("new tab", selectedItem?.id))
 
     //console.log(selectedItem?.id)
   }
 
-  // function disableButton() {
-  //   return employees.length === allEmployees.length;
-  // }
-
-  // const closeButtonHandler = (item) => {
-  //   const newEmployees = [...employees];
-  //   const index = newEmployees.indexOf(item);
-
-  //   newEmployees.splice(index, 1);
-  //   setEmployees(newEmployees);
-
-  //   if (index >= newEmployees.length && index > 0) {
-  //     setSelectedItem(newEmployees[index - 1]);
-  //   }
-  // }
-
   const deleteTabHandler = (tabId) => {
     if (window.confirm("Are you sure you want to delete the tab and all its note content?")) {
-      const newData = data.filter(d => d.id !== tabId)
-      setData(newData)
-      console.log('delete')
+      // const newData = data.filter(d => d.id !== tabId)
+      // setData(newData)
+      // console.log('delete')
 
-      dispatch(deleteTab(tabId))
+      deleteTab(tabId)
     }
   }
 
@@ -93,7 +85,7 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
 
     const editTabTitle = (newValue) => {
       const updatedTab = {title: newValue}
-      dispatch(editTab(data.id, updatedTab))
+      editTab(data.id, updatedTab)
     }
 
     return (
@@ -130,12 +122,12 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
 
   //lag in updating, selection is a little crazy
   const onTabDrop = async (e) => {
+    // window.alert("onTabDrop")
+
     const newData = [...data];
     newData.splice(e.fromIndex, 1);
     newData.splice(e.toIndex, 0, e.itemData);
     setData(newData);
-
-
 
     const tabId = e.itemData.id
     console.log(tabId)
@@ -143,20 +135,20 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
 
     if (e.toIndex === 0 && e.fromIndex !== e.toIndex) {
       const updatedTab = {first: true}
-      dispatch(editTab(tabId, updatedTab))
+      editTab(tabId, updatedTab)
       console.log("changed to first")
     }
     if (e.toIndex !== 0 && e.fromIndex > e.toIndex) {
       const afterId = e.toData[e.toIndex-1].id
       const updatedTab = {after: afterId}
-      dispatch(editTab(tabId, updatedTab))
+      editTab(tabId, updatedTab)
       // setSelectedItem(e.toData[e.toIndex])
       console.log(`changed to front to ${[e.toIndex]} `)
     }
     if (e.toIndex !== 0 && e.fromIndex < e.toIndex) {
       const afterId = e.toData[e.toIndex].id
       const updatedTab = {after: afterId}
-      dispatch(editTab(tabId, updatedTab))
+      editTab(tabId, updatedTab)
       // setSelectedItem(e.toData[e.toIndex + 1])
       console.log(`changed to later to ${[e.toIndex]} `)
     }
@@ -167,7 +159,8 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
   }
 
   return (
-    <DndProvider backend={HTML5Backend}>   
+    <DndProvider backend={HTML5Backend}>
+
       {/* solve problem of cannot have 2 html5 backends */}
       <div id="container">
         {/* <Button
@@ -194,7 +187,7 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
         
       >
         <TabPanel
-          dataSource={tabs}
+          dataSource={data}
           // height={550}
           className="tabsBox"
           
@@ -210,10 +203,30 @@ const NotebookTabs: React.FC<{initData: any}> = ({initData}) => {
           itemTitleRender={renderTitle}
           itemComponent={NotesTemplate}
         />
+{/*        <pre>
+        {JSON.stringify(tabs, null, 2)}
+      </pre>
+        <pre>
+        {JSON.stringify(data, null, 2)}
+      </pre>*/}
       </Sortable>
 
     </DndProvider>
   );
 }
 
-export default NotebookTabs
+const mapStateToProps = state => {
+  return {
+    selectTabData: tabId => selectTabTree(tabId)(state)
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    addTab,
+    editTab,
+    deleteTab
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotebookTabs)

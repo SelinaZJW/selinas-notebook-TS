@@ -30,7 +30,19 @@ const tabReducer = (state: TabsState = initialState, action: TabAction) => {
     case 'SET_TAB': {
       return {
         ...state,
-        [action.tab.id]: action.tab
+        data: {
+          ...state.data,
+          [action.tab.id]: action.tab
+        }
+      }
+    }
+    case 'DELETE_TAB': {
+      const newData = {...state.data}
+      delete newData[action.tabId]
+
+      return {
+        ...state,
+        data: newData
       }
     }
     default:
