@@ -15,7 +15,7 @@ import {HTML5Backend} from 'react-dnd-html5-backend'
 import {DndProvider} from 'react-dnd'
 import {selectTabTree} from "../../store/selectors/selectTabTree";
 import {bindActionCreators} from "redux";
-import {addTab} from "../../store/actions/addTab";
+import {createTab} from "../../store/actions/createTab";
 import {editTab} from "../../store/actions/editTab";
 import {deleteTab} from "../../store/actions/deleteTab";
 
@@ -59,7 +59,7 @@ const NotebookTabs: React.FC<any> = ({addTab, editTab, deleteTab}) => {
     })
 
 
-    // dispatch(addTab("new tab", selectedItem?.id))
+    // dispatch(createTab("new tab", selectedItem?.id))
 
     //console.log(selectedItem?.id)
   }
@@ -223,7 +223,7 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    addTab,
+    addTab: createTab,
     editTab,
     deleteTab
   }, dispatch)

@@ -6,9 +6,9 @@ import {NodeHandlers, NodeState, TreeApi} from "react-arborist";
 import {MyData} from "../../../../components/NotebookView/types";
 
 import {useDispatch} from "react-redux";
-import {createNote} from "../../../store/reducers/noteReducer";
 import {TabId} from "../../../model";
 import {deleteNote} from "../../../store/actions/deleteNote";
+import {createNote} from "../../../store/actions/createNote";
 
 
 const size = 16;

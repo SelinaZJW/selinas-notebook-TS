@@ -23,27 +23,6 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
                 },
             }
         }
-        /*    case 'NEW_TAB': {
-              // const newTab = action.data
-              // const tabTree = {...newTab, level: 0, isOpen: true, children: []}
-
-              // return [...state, tabTree]
-              return action.data
-            }*/
-        /*    case 'DELETE_TAB': {
-              return action.data
-            }*/
-        /*    case 'EDIT_NOTE': {
-              // const id = action.data.id
-              // const anecdoteToVote = state.find(a => a.id === id)
-              // const votedAnecdote = { ...anecdoteToVote, votes: anecdoteToVote.votes + 1 }
-
-              // return state.map(a => a.id !== id ? a : votedAnecdote )
-              return action.data
-            }*/
-        /*    case 'NEW_NOTE': {
-              return action.data
-            }*/
         case 'ADD_ROOT_NOTE': {
             const rootNodes = state.data[action.tabId]
 
@@ -58,7 +37,7 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
         case 'SET_NOTE': {
             console.log('SET_NOTE', action.tabId, action.noteData)
 
-            const rootNodes: any[] = state.data[action.tabId]
+/*            const rootNodes: any[] = state.data[action.tabId]
 
             const treeModel = new TreeModel().parse({children: rootNodes})
             const node = treeModel.first((n) => n.model.id === action.noteData.id);
@@ -71,7 +50,19 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
                     ...state.data,
                     [action.tabId]: rootNodes
                 },
+            }*/
+
+            const tabData = state.data[action.tabId]
+
+            const index = tabData.findIndex(node => node.id === action.noteData.id)
+            if(index !== -1) {
+                tabData[index] = action.noteData
+            } else {
+                tabData.push(action.noteData)
             }
+
+            return state
+
         }
         /*    case 'ADD_ROOT_NOTE': {
               //const tabData = state.find(t => t.id == action.tabId)
@@ -182,20 +173,6 @@ export const initializeAllNotes = () => {
     }
 }
 
-export const createNote = (tabId, newNote) => {
-    return async dispatch => {
-        const newN = await noteService.createNewNote(tabId, newNote)
-        console.log(newN)
 
-/*        noteService.getTabNotes(tabId).then(tabTree => {
-                return dispatch({
-                    type: 'SET_TAB_NOTES',
-                    tabId,
-                    rootNodes: tabTree.children
-                })
-            }
-        )*/
-    }
-}
 
 export default noteReducer

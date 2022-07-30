@@ -1,6 +1,6 @@
 import tabService from "../../../services/tabService";
 
-export const addTab = (title, after?) => {
+export const createTab = (title, after?) => {
     return async dispatch => {
         const newTab = await tabService.createNewTabAfter(title, after)
         console.log(newTab)

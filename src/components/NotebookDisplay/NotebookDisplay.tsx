@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import {NodeId} from "../../model";
 import {editNoteTitle} from "../../store/actions/editNoteTitle";
 import {bindActionCreators} from "redux";
-import {addRootNote} from "../../store/actions/addRootNote";
+import {createRootNote} from "../../store/actions/createRootNote";
 import {MyData} from "../../../components/NotebookView/types";
 import {moveNotes} from "../../store/actions/moveNotes";
 import {selectTabTree} from "../../store/selectors/selectTabTree";
@@ -155,7 +155,7 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getTabNotes,
-    addRootNote,
+    addRootNote: createRootNote,
     editNoteTitle,
     moveNotes
   }, dispatch)
