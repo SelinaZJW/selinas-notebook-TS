@@ -1,11 +1,8 @@
-import React, {useEffect, useMemo, useRef, useState} from "react";
-// import { TreeApi } from "react-arborist";
+import React, {useEffect, useRef, useState} from "react";
 import {Tree, TreeApi} from "react-arborist";
-// import { EditHandler, IdObj, MoveHandler, NodeRenderer, ToggleHandler } from "react-arborist/dist/types";
 import {mkNode} from "./components/Node";
-import {connect, useDispatch} from "react-redux";
-import {RootState} from "../../store/store";
-import {NodeId, TabId} from "../../model";
+import {connect} from "react-redux";
+import {NodeId} from "../../model";
 import {editNoteTitle} from "../../store/actions/editNoteTitle";
 import {bindActionCreators} from "redux";
 import {addRootNote} from "../../store/actions/addRootNote";
