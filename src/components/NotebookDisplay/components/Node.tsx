@@ -123,7 +123,7 @@ export const mkNode = (tabId: TabId) => ({
   const handleDeleteNote = () => {
     if (window.confirm("Are you sure you want to delete the note and all its content?")) {
       console.log('delete')
-      dispatch(deleteNote(noteId)) //need feature to delete notes within notes
+      dispatch(deleteNote(tabId, noteId)) //need feature to delete notes within notes
     }
   }
 

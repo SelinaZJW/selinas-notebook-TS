@@ -5,13 +5,14 @@ import {NoteAction, NotesState} from "../types";
 import {ITab, ITreeNode} from "../../model";
 import TreeModel from "tree-model-improved";
 import {getTabNotes} from "../actions/getTabNotes";
+import produce from "immer";
 
 const initialState: NotesState = {
     data: {},
     currentRequestId: "", error: undefined, loading: undefined
 }
 
-const noteReducer = (state: NotesState = initialState, action: NoteAction) => {
+const noteReducer = produce((state: NotesState = initialState, action: NoteAction) => {
     switch (action.type) {
         case 'SET_TAB_NOTES': {
             return {
@@ -98,20 +99,25 @@ const noteReducer = (state: NotesState = initialState, action: NoteAction) => {
               return [tabNode.model]
             }*/
         case 'DELETE_NOTE': {
-            const rootNodes = state.data[action.tabId]
+            const tabData = state.data[action.tabId]
 
-            return {
+            const index = tabData.findIndex(node => node.id === action.noteId)
+            tabData.splice(index, 1)
+
+            return state
+
+            /*return {
                 ...state,
                 data: {
                     ...state.data,
                     [action.tabId]: rootNodes
                 },
-            }
+            }*/
         }
         default:
             return state
     }
-}
+})
 
 // export const initializeTabNotes = (tabId) => {
 //   return async dispatch =>  {
