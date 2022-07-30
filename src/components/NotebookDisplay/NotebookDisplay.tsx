@@ -13,6 +13,7 @@ import {MyData} from "../../../components/NotebookView/types";
 import {moveNotes} from "../../store/actions/moveNotes";
 import {selectTabTree} from "../../store/selectors/selectTabTree";
 import DisplaySlider from "../../../components/NotebookView/DisplaySlider";
+import {getTabNotes} from "../../store/actions/getTabNotes";
 
 // export interface TreeProps<T> {
 //   children: NodeRenderer<T>;
@@ -39,7 +40,7 @@ import DisplaySlider from "../../../components/NotebookView/DisplaySlider";
 
 // export declare const Tree: <T extends IdObj>(props: TreeProps<T> & import("react").RefAttributes<TreeApi<T>>) => ReactElement<any, string | import("react").JSXElementConstructor<any>> | null;
 
-const NotebookDisplay = ({tabId, selectTabData, addRootNote, editNoteTitle, moveNotes}) => {
+const NotebookDisplay = ({tabId, getTabNotes, selectTabData, addRootNote, editNoteTitle, moveNotes}) => {
   console.log("#NotebookDisplay")
 
   const Node = mkNode(tabId)
@@ -47,6 +48,10 @@ const NotebookDisplay = ({tabId, selectTabData, addRootNote, editNoteTitle, move
   const treeApi = useRef<TreeApi>()
 
   const tabData = selectTabData(tabId)
+
+  useEffect(() => {
+    getTabNotes(tabId)
+  }, [])
 
   // const backend = useBackend({initData: tabData})
 
@@ -135,11 +140,11 @@ const NotebookDisplay = ({tabId, selectTabData, addRootNote, editNoteTitle, move
     >
       {Node}
     </Tree>
-      {/*tabId: {tabId}
+      tabId: {tabId}
       Editing: {editingId}
       <pre>
         {JSON.stringify(tabData, null, 2)}
-       </pre>*/}
+       </pre>
     </div>
   </>);
 }
@@ -152,6 +157,7 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
+    getTabNotes,
     addRootNote,
     editNoteTitle,
     moveNotes

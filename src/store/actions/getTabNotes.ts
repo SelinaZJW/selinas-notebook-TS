@@ -1,14 +1,16 @@
 import {TabId} from "../../model";
-import tabService from "../../../services/tabService";
+import noteService from "../../../services/noteService";
 
 export const getTabNotes = (tabId: TabId) => {
 
     return (dispatch, getState) => {
-        tabService.getTabNotes(tabId).then(tabTree => {
+        noteService.getTabNotes(tabId).then(result => {
+                console.log("getTabNotes", result)
+
                 return dispatch({
                     type: 'SET_TAB_NOTES',
                     tabId,
-                    rootNodes: tabTree.children
+                    notes: result
                 })
             }
         )

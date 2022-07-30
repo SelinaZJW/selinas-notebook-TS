@@ -1,20 +1,13 @@
 import axios from 'axios'
-import {ITab, ITreeNode, TabId} from "../src/model";
-import {TabbedItem} from "devextreme-react/form";
+import {ITab} from "../src/model";
 
-const baseUrl_tree = `/api/tree`
+// const baseUrl_tree = `/api/tree`
 const baseUrl_tabs = `/api/tabs`
 
 const getAllTabs = async () => {
   const response = await axios.get<ITab[]>(baseUrl_tabs)
   return response.data
 }
-
-const getTabNotes: (tabId: TabId) => Promise<ITreeNode> = async (tabId: TabId) => {
-  const response = axios.get(`${baseUrl_tree}/${tabId}`)
-  return response.then(resp => resp.data)
-}
-
 
 const createNewTab = async (title) => {
   const newT = {title}
@@ -60,4 +53,4 @@ const deleteTab = async (tabId) => {
   return response.headers
 }
 
-export default { getAllTabs, getTabNotes, createNewTab, createNewTabAfter, editTab, editTabTitle, editTabOrderFirst,editTabOrderNonFirst, deleteTab }
+export default { getAllTabs, createNewTab, createNewTabAfter, editTab, editTabTitle, editTabOrderFirst,editTabOrderNonFirst, deleteTab }

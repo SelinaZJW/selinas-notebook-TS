@@ -1,7 +1,13 @@
 import axios from 'axios'
+import {INote, TabId} from "../src/model";
 
 const baseUrl_tabs = `/api/tabs`
 const baseUrl_notes = `/api/notes`
+
+const getTabNotes: (tabId: TabId) => Promise<INote> = async (tabId: TabId) => {
+  const response = axios.get(`${baseUrl_tabs}/${tabId}/notes`)
+  return response.then(resp => resp.data)
+}
 
 //if no parentId, is root
 //if no after, is last 
@@ -72,4 +78,4 @@ const deleteNote = async (noteId) => {
 
 
 
-export default { createNewNote, editNote, editNoteTitle, editNoteContent, editNoteParentNonRoot, editNoteParentRoot, editNoteOrderFirst, editNoteOrderNonFirst, deleteNote }
+export default { createNewNote,getTabNotes, editNote, editNoteTitle, editNoteContent, editNoteParentNonRoot, editNoteParentRoot, editNoteOrderFirst, editNoteOrderNonFirst, deleteNote }

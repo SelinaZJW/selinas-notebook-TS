@@ -50,7 +50,7 @@ const tabReducer = (state: TabsState = initialState, action: TabAction) => {
   } 
 }
 
-export const initializeTabs = () => {
+/*export const initializeTabs = () => {
   return async dispatch =>  {
     const tabs = await notebookService.getAllTabs()
     dispatch({
@@ -58,7 +58,7 @@ export const initializeTabs = () => {
       data: tabs
     })
   } 
-}
+}*/
 
 
 

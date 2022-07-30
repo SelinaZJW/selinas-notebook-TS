@@ -18,7 +18,7 @@ const noteReducer = (state: NotesState = initialState, action: NoteAction) => {
                 ...state,
                 data: {
                     ...state.data,
-                    [action.tabId]: action.rootNodes
+                    [action.tabId]: action.notes
                 },
             }
         }
@@ -50,7 +50,7 @@ const noteReducer = (state: NotesState = initialState, action: NoteAction) => {
                 ...state,
                 data: {
                     ...state.data,
-                    [action.tabId]: [...rootNodes, action.rootNode]
+                    [action.tabId]: [...rootNodes, action.note]
                 },
             }
         }
@@ -146,16 +146,16 @@ export const initializeAllNotes = () => {
                 tabs
             })
 
-            tabs.map(tab => {
-                tabService.getTabNotes(tab.id).then(tabTree => {
+/*            tabs.map(tab => {
+                noteService.getTabNotes(tab.id).then(result => {
                         return dispatch({
                             type: 'SET_TAB_NOTES',
                             tabId: tab.id,
-                            rootNodes: tabTree.children
+                            notes: result
                         })
                     }
                 )
-            })
+            })*/
         })
 
 
@@ -181,14 +181,14 @@ export const createNote = (tabId, newNote) => {
         const newN = await noteService.createNewNote(tabId, newNote)
         console.log(newN)
 
-        tabService.getTabNotes(tabId).then(tabTree => {
+/*        noteService.getTabNotes(tabId).then(tabTree => {
                 return dispatch({
                     type: 'SET_TAB_NOTES',
                     tabId,
                     rootNodes: tabTree.children
                 })
             }
-        )
+        )*/
     }
 }
 

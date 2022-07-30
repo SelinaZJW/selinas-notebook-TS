@@ -112,6 +112,6 @@ const deleteNote = async (noteId) => {
   return response.headers
 }
 
+export default  {}
 
-
-export default { getAllTabs, getTabNotes, createNewTab, createNewTabAfter, createNewNote, editTabTitle, editTabOrderFirst,editTabOrderNonFirst, editNoteTitle, editNoteContent, editNoteParentNonRoot, editNoteParentRoot, editNoteOrderFirst, editNoteOrderNonFirst, deleteTab, deleteNote }
+// export default { getAllTabs, getTabNotes, createNewTab, createNewTabAfter, createNewNote, editTabTitle, editTabOrderFirst,editTabOrderNonFirst, editNoteTitle, editNoteContent, editNoteParentNonRoot, editNoteParentRoot, editNoteOrderFirst, editNoteOrderNonFirst, deleteTab, deleteNote }
