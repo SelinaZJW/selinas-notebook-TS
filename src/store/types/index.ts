@@ -1,4 +1,4 @@
-import {INote, ITab, ITreeNode, TabId} from "../../model";
+import {INote, ITab, ITreeNode, NodeId, TabId} from "../../model";
 
 
 export type TabsState = {
@@ -27,3 +27,4 @@ export type NoteAction =
     | { type: "SET_TAB_NOTES"; tabId: TabId, rootNodes: ITreeNode[] }
     | { type: "ADD_ROOT_NOTE"; tabId: TabId, rootNode: ITreeNode }
     | { type: "SET_NOTE"; tabId: TabId, noteData: INote }
+    | { type: "DELETE_NOTE"; tabId: TabId, noteId: NodeId }

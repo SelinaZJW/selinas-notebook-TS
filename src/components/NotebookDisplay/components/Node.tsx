@@ -1,13 +1,14 @@
 import classNames from "classnames";
-import React, { CSSProperties, FocusEvent, KeyboardEvent, MouseEventHandler, useState } from "react";
-import { ChevronDown, ChevronRight, FileText, Folder, FilePlus, Trash2, Edit, CornerDownLeft } from "react-feather";
+import React, {CSSProperties, FocusEvent, KeyboardEvent} from "react";
+import {ChevronDown, ChevronRight, CornerDownLeft, Edit, FilePlus, FileText, Folder, Trash2} from "react-feather";
 import Tooltip from '@mui/material/Tooltip';
-import { NodeHandlers,  NodeState, TreeApi } from "react-arborist";
-import { MyData } from "./types";
+import {NodeHandlers, NodeState, TreeApi} from "react-arborist";
+import {MyData} from "../../../../components/NotebookView/types";
 
-import { useDispatch } from "react-redux";
-import { createNote, deleteNote } from "../../src/store/reducers/noteReducer";
-import { TabId } from "../../src/model";
+import {useDispatch} from "react-redux";
+import {createNote} from "../../../store/reducers/noteReducer";
+import {TabId} from "../../../model";
+import {deleteNote} from "../../../store/actions/deleteNote";
 
 
 const size = 16;

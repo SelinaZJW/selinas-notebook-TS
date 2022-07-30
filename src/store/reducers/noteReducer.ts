@@ -97,9 +97,17 @@ const noteReducer = (state: NotesState = initialState, action: NoteAction) => {
 
               return [tabNode.model]
             }*/
-        /*    case 'DELETE_NOTE': {
-              return action.data
-            }*/
+        case 'DELETE_NOTE': {
+            const rootNodes = state.data[action.tabId]
+
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    [action.tabId]: rootNodes
+                },
+            }
+        }
         default:
             return state
     }
@@ -155,25 +163,18 @@ export const initializeAllNotes = () => {
         // const tabNotes = await notebookService.getTabNotes(tabId)
         // const notes = await Promise.all(tabIds.map(async (tabId) => {
         //     const tabNotes = await tabService.getTabNotes(tabId)
-            // console.log(tabNotes)
-            // return tabNotes
+        // console.log(tabNotes)
+        // return tabNotes
 
-            // dispatch({
-            //     type: 'INIT_TAB_NOTES',
-            //     tabId: tabId,
-            //     data: notes
-            // })
+        // dispatch({
+        //     type: 'INIT_TAB_NOTES',
+        //     tabId: tabId,
+        //     data: notes
+        // })
         // }))
         // console.log(notes)
     }
 }
-
-
-
-
-
-
-
 
 export const createNote = (tabId, newNote) => {
     return async dispatch => {
@@ -188,19 +189,6 @@ export const createNote = (tabId, newNote) => {
                 })
             }
         )
-    }
-}
-
-
-
-export const deleteNote = (noteId) => {
-    return async dispatch => {
-        await noteService.deleteNote(noteId)
-
-        /*dispatch({
-            type: 'DELETE_NOTE',
-            data: notes
-        })*/
     }
 }
 
