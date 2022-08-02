@@ -11,7 +11,7 @@ export const editNote = (noteId, updatedNote) => {
 
         // const notes = await getAllTabNotes()
 
-        dispatch(getTabNotes(editedNote.tabId))
+        // dispatch(getTabNotes(editedNote.tabId))
 
         /*
         dispatch({

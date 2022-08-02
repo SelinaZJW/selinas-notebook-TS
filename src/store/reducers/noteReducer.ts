@@ -1,27 +1,45 @@
-import notebookService from "../../../services/notebookService";
-import noteService from "../../../services/noteService";
 import tabService from "../../../services/tabService"
 import {NoteAction, NotesState} from "../types";
-import {ITab, ITreeNode} from "../../model";
-import TreeModel from "tree-model-improved";
-import {getTabNotes} from "../actions/getTabNotes";
+import {ITab} from "../../model";
 import produce from "immer";
 
 const initialState: NotesState = {
     data: {},
+    byParent: {},
     currentRequestId: "", error: undefined, loading: undefined
+}
+
+const unique = (value, index, self) => {
+    return self.indexOf(value) === index
 }
 
 const noteReducer = produce((state: NotesState = initialState, action: NoteAction) => {
     switch (action.type) {
         case 'SET_TAB_NOTES': {
-            return {
+            // window.alert(`SET_TAB_NOTES`)
+            /*return {
                 ...state,
                 data: {
                     ...state.data,
                     [action.tabId]: action.notes
                 },
-            }
+            }*/
+
+            const parentIds = action.notes.map(note => note.parentId).filter(unique)
+
+            state.data[action.tabId] = action.notes.map(note => ({
+                id: note.id,
+                title: note.title
+            }))
+
+            parentIds.forEach(parentId => {
+                const childIds = action.notes.filter(note => note.parentId == parentId).map(note => note.id)
+                const pId = parentId || action.tabId
+
+                state.byParent[pId] = childIds
+            })
+
+            return state;
         }
         case 'ADD_ROOT_NOTE': {
             const rootNodes = state.data[action.tabId]
@@ -37,32 +55,48 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
         case 'SET_NOTE': {
             console.log('SET_NOTE', action.tabId, action.noteData)
 
-/*            const rootNodes: any[] = state.data[action.tabId]
+            /*            const rootNodes: any[] = state.data[action.tabId]
 
-            const treeModel = new TreeModel().parse({children: rootNodes})
-            const node = treeModel.first((n) => n.model.id === action.noteData.id);
+                        const treeModel = new TreeModel().parse({children: rootNodes})
+                        const node = treeModel.first((n) => n.model.id === action.noteData.id);
 
-            node.model.title = action.noteData.title
+                        node.model.title = action.noteData.title
 
-            return {
-                ...state,
-                data: {
-                    ...state.data,
-                    [action.tabId]: rootNodes
-                },
-            }*/
+                        return {
+                            ...state,
+                            data: {
+                                ...state.data,
+                                [action.tabId]: rootNodes
+                            },
+                        }*/
 
             const tabData = state.data[action.tabId]
 
-            const index = tabData.findIndex(node => node.id === action.noteData.id)
-            if(index !== -1) {
+            const index = (tabData || []).findIndex(node => node.id === action.noteData.id)
+            if (index !== -1) {
                 tabData[index] = action.noteData
             } else {
                 tabData.push(action.noteData)
             }
 
             return state
+        }
+        case 'SET_NOTE_PARENT': {
+            const {noteId, parentId, index} = action
+            // window.alert(`SET_NOTE_PARENT ${noteId} ${parentId}`)
 
+            const currentParent = Object.entries(state.byParent).find(e => e[1].indexOf(noteId) !== -1)
+            const currentIndex = currentParent[1].findIndex(n => n == noteId)
+            // window.alert(`currentParentIndex: ${currentParent}`)
+            state.byParent[currentParent[0]].splice(currentIndex, 1)
+
+            if(state.byParent[parentId]) {
+                state.byParent[parentId].splice(index, 0, noteId)
+            } else {
+                state.byParent[parentId] = [noteId]
+            }
+
+            return state;
         }
         /*    case 'ADD_ROOT_NOTE': {
               //const tabData = state.find(t => t.id == action.tabId)
@@ -143,16 +177,16 @@ export const initializeAllNotes = () => {
                 tabs
             })
 
-/*            tabs.map(tab => {
-                noteService.getTabNotes(tab.id).then(result => {
-                        return dispatch({
-                            type: 'SET_TAB_NOTES',
-                            tabId: tab.id,
-                            notes: result
-                        })
-                    }
-                )
-            })*/
+            /*            tabs.map(tab => {
+                            noteService.getTabNotes(tab.id).then(result => {
+                                    return dispatch({
+                                        type: 'SET_TAB_NOTES',
+                                        tabId: tab.id,
+                                        notes: result
+                                    })
+                                }
+                            )
+                        })*/
         })
 
 
@@ -172,7 +206,6 @@ export const initializeAllNotes = () => {
         // console.log(notes)
     }
 }
-
 
 
 export default noteReducer

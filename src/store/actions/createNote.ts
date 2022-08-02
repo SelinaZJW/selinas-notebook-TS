@@ -1,13 +1,18 @@
-import {NodeId, TabId} from "../../model";
 import noteService from "../../../services/noteService";
 import {getTabNotes} from "./getTabNotes";
+import {nextNoteId} from "../util/nextNoteId";
 
 export const createNote = (tabId, newNote) => {
     return async dispatch => {
+        const id = nextNoteId()
+
         dispatch({
             type: 'SET_NOTE',
             tabId,
-            noteData: newNote
+            noteData: {
+                id,
+                ...newNote
+            }
         })
 
         const newN = await noteService.createNewNote(tabId, newNote)

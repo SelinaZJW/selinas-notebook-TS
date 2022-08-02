@@ -55,6 +55,13 @@ export const moveNotes = (
             dstParent.addChildAtIndex(newItem, dstIndex);
             src.drop();
 
+            dispatch({
+                type: 'SET_NOTE_PARENT',
+                noteId,
+                parentId: dstParentId,
+                index: dstIndex
+            })
+
             return promise
         })
 
