@@ -6,25 +6,35 @@ import {nextNoteId} from "../util/nextNoteId";
 export const createRootNote = (tabId: TabId, noteIdCallback: (NodeId) => void) => {
     const id = nextNoteId()
 
-    const newNote: ICreateNote = {
-        id,
-        title: "New note",
-        parentId: null
-    }
+    // const newNote: ICreateNote = {
+    //     id,
+    //     title: "New note"
+    // }
 
     return async (dispatch, getState) => {
 
         dispatch({
             type: 'SET_NOTE',
             tabId,
-            noteData: newNote
+            noteData: {
+                id,
+                title: "",
+                draft: true
+            }
         })
 
-        const newN = await noteService.createNewNote(tabId, newNote)
-        console.log(newN)
+        dispatch({
+            type: 'SET_NOTE_PARENT',
+            noteId: id,
+            parentId: tabId,
+            index: 0
+        })
+
+        // const newN = await noteService.createNewNote(tabId, newNote)
+        // console.log(newN)
 
         noteIdCallback(id)
 
-        dispatch(getTabNotes(tabId))
+        // dispatch(getTabNotes(tabId))
     }
 }

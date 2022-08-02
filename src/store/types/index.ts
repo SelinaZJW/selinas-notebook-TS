@@ -24,7 +24,8 @@ export type NotesState = {
 
 export type NoteData = {
     id: NodeId
-    title: string
+    title: string,
+    draft?: boolean
 }
 
 export type NoteAction =

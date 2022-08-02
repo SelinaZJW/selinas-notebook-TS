@@ -2,7 +2,7 @@ import {useCallback, useMemo, useState} from "react";
 import TreeModel from "tree-model-improved";
 import {MyData} from "./types";
 import {useDispatch} from 'react-redux';
-import {editNote} from "../../src/store/actions/editNote";
+import {updateNote} from "../../src/store/actions/updateNote";
 
 function findById(node: any, id: string): TreeModel.Node<any> | null {
   return node.first((n: any) => n.model.id === id);
@@ -81,7 +81,7 @@ export function useBackend(props: {initData: MyData}) {
 
         const newNote = { isRoot, parentId, first, after }  //backend not working heree sometimes??
         console.log(newNote)
-        dispatch(editNote(noteId, newNote))     //selection go crazy again
+        // dispatch(updateNote(noteId, newNote))     //selection go crazy again
         //difficult/unable to change order between files/not folders??
 
         //const newItem = new TreeModel().parse({...src.model, level: dstParent?.model.level + 1 });  //change hierarchy of moved item, how to change 
@@ -107,7 +107,7 @@ export function useBackend(props: {initData: MyData}) {
       console.log(node.model.id, title)
       const updatedNote = {title: title}
       const noteId = node.model.id
-      dispatch(editNote(noteId, updatedNote))   //selection go crazy
+      // dispatch(updateNote(noteId, updatedNote))   //selection go crazy
 
       if (node) {
         node.model.title = title;

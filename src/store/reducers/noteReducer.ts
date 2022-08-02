@@ -53,7 +53,8 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
             }
         }
         case 'SET_NOTE': {
-            console.log('SET_NOTE', action.tabId, action.noteData)
+            // console.log('SET_NOTE', action.tabId, action.noteData)
+            // window.alert(`SET_NOTE ${action.tabId} ${JSON.stringify(action.noteData, null, 2)}`)
 
             /*            const rootNodes: any[] = state.data[action.tabId]
 
@@ -72,11 +73,14 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
 
             const tabData = state.data[action.tabId]
 
-            const index = (tabData || []).findIndex(node => node.id === action.noteData.id)
+            const index = tabData ? tabData.findIndex(node => node.id === action.noteData.id) : -1
             if (index !== -1) {
-                tabData[index] = action.noteData
+                tabData[index] = {
+                    ...tabData[index],
+                    ...action.noteData
+                }
             } else {
-                tabData.push(action.noteData)
+                state.data[action.tabId].push(action.noteData)
             }
 
             return state
@@ -86,9 +90,12 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
             // window.alert(`SET_NOTE_PARENT ${noteId} ${parentId}`)
 
             const currentParent = Object.entries(state.byParent).find(e => e[1].indexOf(noteId) !== -1)
-            const currentIndex = currentParent[1].findIndex(n => n == noteId)
-            // window.alert(`currentParentIndex: ${currentParent}`)
-            state.byParent[currentParent[0]].splice(currentIndex, 1)
+
+            if(currentParent) {
+                const currentIndex = currentParent[1].findIndex(n => n == noteId)
+                // window.alert(`currentParentIndex: ${currentParent}`)
+                state.byParent[currentParent[0]].splice(currentIndex, 1)
+            }
 
             if(state.byParent[parentId]) {
                 state.byParent[parentId].splice(index, 0, noteId)

@@ -3,7 +3,7 @@ import {Tree, TreeApi} from "react-arborist";
 import {mkNode} from "./components/Node";
 import {connect} from "react-redux";
 import {NodeId} from "../../model";
-import {editNoteTitle} from "../../store/actions/editNoteTitle";
+import {updateNoteTitle} from "../../store/actions/updateNoteTitle";
 import {bindActionCreators} from "redux";
 import {createRootNote} from "../../store/actions/createRootNote";
 import {MyData} from "../../../components/NotebookView/types";
@@ -156,7 +156,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getTabNotes,
     addRootNote: createRootNote,
-    editNoteTitle,
+    editNoteTitle: updateNoteTitle,
     moveNotes
   }, dispatch)
 }

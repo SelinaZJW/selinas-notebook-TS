@@ -1,7 +1,7 @@
 import TreeModel from "tree-model-improved";
 import {changeLevel} from "../../../components/NotebookView/backend";
 import {TabId} from "../../model";
-import {editNote} from "./editNote";
+import {updateNote} from "./updateNote";
 import {selectTabTree} from "../selectors/selectTabTree";
 
 function findById(node: any, id: string): TreeModel.Node<any> | null {
@@ -47,7 +47,7 @@ export const moveNotes = (
             const newNote = { isRoot, parentId, first, after }  //backend not working heree sometimes??
             console.log(newNote)
 
-            const promise = dispatch(editNote(noteId, newNote))     //selection go crazy again
+            const promise = dispatch(updateNote(tabId, noteId, newNote))     //selection go crazy again
             //difficult/unable to change order between files/not folders??
 
             //const newItem = new TreeModel().parse({...src.model, level: dstParent?.model.level + 1 });  //change hierarchy of moved item, how to change
