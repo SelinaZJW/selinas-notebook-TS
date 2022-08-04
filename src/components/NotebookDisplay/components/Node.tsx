@@ -9,6 +9,7 @@ import {useDispatch} from "react-redux";
 import {TabId} from "../../../model";
 import {deleteNote} from "../../../store/actions/deleteNote";
 import {createNote} from "../../../store/actions/createNote";
+import {addDraftNote} from "../../../store/actions/addDraftNote";
 
 
 const size = 16;
@@ -91,7 +92,7 @@ function EditForm({ defaultValue, submit, reset }: FormProps) {
 }
 
 
-export const mkNode = (tabId: TabId) => ({
+export const mkNode = (tabId: TabId, noteIdCallback?: (NodeId) => void) => ({
   innerRef,
   data,
   styles,
@@ -113,11 +114,12 @@ export const mkNode = (tabId: TabId) => ({
 
   const handleAddNote = () => {
     const newNote = {title: "", parentId: parentId, after: noteId}
-    dispatch(createNote(tabId, newNote))
+    dispatch(addDraftNote(tabId, parentId, "", noteId, noteIdCallback))
   }
   const handleAddChildNote = () => {
     const newNote = {title: "", parentId: noteId}
-    dispatch(createNote(tabId, newNote))
+    // dispatch(addDraftNote(tabId, newNote))
+    dispatch(addDraftNote(tabId, noteId, "", undefined, noteIdCallback))
   }
 
   const handleDeleteNote = () => {

@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import {NodeId} from "../../model";
 import {updateNoteTitle} from "../../store/actions/updateNoteTitle";
 import {bindActionCreators} from "redux";
-import {createRootNote} from "../../store/actions/createRootNote";
+import {addDraftNote} from "../../store/actions/addDraftNote";
 import {MyData} from "../../../components/NotebookView/types";
 import {moveNotes} from "../../store/actions/moveNotes";
 import {selectTabTree} from "../../store/selectors/selectTabTree";
@@ -40,7 +40,7 @@ import {getTabNotes} from "../../store/actions/getTabNotes";
 const NotebookDisplay = ({tabId, getTabNotes, selectTabData, addRootNote, editNoteTitle, moveNotes}) => {
   console.log("#NotebookDisplay")
 
-  const Node = mkNode(tabId)
+
 
   const treeApi = useRef<TreeApi>()
 
@@ -53,6 +53,7 @@ const NotebookDisplay = ({tabId, getTabNotes, selectTabData, addRootNote, editNo
   // const backend = useBackend({initData: tabData})
 
   const [editingId, setEditingId] = useState<NodeId>(undefined)
+  const Node = mkNode(tabId, setEditingId)
 
   useEffect(() => {
     console.log("editingId", editingId)
@@ -64,7 +65,7 @@ const NotebookDisplay = ({tabId, getTabNotes, selectTabData, addRootNote, editNo
 
 
   const addRootNoteClicked = () => {
-    addRootNote(tabId, setEditingId)
+    addRootNote(tabId, undefined, "", undefined, setEditingId)
   }
 
   const [toggleMap, setToggleMap] = useState<{[id: string]: boolean}>({})
@@ -155,7 +156,7 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getTabNotes,
-    addRootNote: createRootNote,
+    addRootNote: addDraftNote,
     editNoteTitle: updateNoteTitle,
     moveNotes
   }, dispatch)

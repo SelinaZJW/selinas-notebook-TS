@@ -6,12 +6,12 @@ import {updateNote} from "./updateNote";
 import {deleteTab} from "./deleteTab";
 import {deleteNote} from "./deleteNote";
 import {createTab} from "./createTab";
-import {createRootNote} from "./createRootNote";
+import {addDraftNote} from "./addDraftNote";
 import {createNote} from "./createNote";
 
 export default {
     createNote,
-    createRootNote,
+    createRootNote: addDraftNote,
     createTab,
     deleteNote,
     deleteTab,

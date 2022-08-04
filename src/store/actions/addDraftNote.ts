@@ -1,9 +1,10 @@
-import {ICreateNote, TabId} from "../../model";
+import {ICreateNote, INote, NodeId, TabId} from "../../model";
 import noteService from "../../../services/noteService";
 import {getTabNotes} from "./getTabNotes";
 import {nextNoteId} from "../util/nextNoteId";
+import {NoteData} from "../types";
 
-export const createRootNote = (tabId: TabId, noteIdCallback: (NodeId) => void) => {
+export const addDraftNote = (tabId: TabId, parentId: NodeId, title: string, after?: NodeId, noteIdCallback?: (NodeId) => void) => {
     const id = nextNoteId()
 
     // const newNote: ICreateNote = {
@@ -26,14 +27,14 @@ export const createRootNote = (tabId: TabId, noteIdCallback: (NodeId) => void) =
         dispatch({
             type: 'SET_NOTE_PARENT',
             noteId: id,
-            parentId: tabId,
+            parentId: parentId || tabId,
             index: 0
         })
 
         // const newN = await noteService.createNewNote(tabId, newNote)
         // console.log(newN)
 
-        noteIdCallback(id)
+        noteIdCallback && noteIdCallback(id)
 
         // dispatch(getTabNotes(tabId))
     }
