@@ -42,15 +42,19 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
             return state;
         }
         case 'ADD_ROOT_NOTE': {
-            const rootNodes = state.data[action.tabId]
+            // const rootNodes = state.data[action.tabId]
 
-            return {
+            state.data[action.tabId].push(action.note)
+
+            /*return {
                 ...state,
                 data: {
                     ...state.data,
                     [action.tabId]: [...rootNodes, action.note]
                 },
-            }
+            }*/
+
+            return state;
         }
         case 'SET_NOTE': {
             // console.log('SET_NOTE', action.tabId, action.noteData)
@@ -105,36 +109,19 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
 
             return state;
         }
-        /*    case 'ADD_ROOT_NOTE': {
-              //const tabData = state.find(t => t.id == action.tabId)
-              //window.alert(JSON.stringify(state, null, 2))
-             //window.alert(JSON.stringify(action, null, 2))
-
-              const lol = {
-                children: state
-              }
-
-              const root = new TreeModel().parse(lol);
-              window.alert(JSON.stringify(root.model, null, 2))
-
-              const tabNode = root.first((n) => {
-                window.alert(JSON.stringify(n.model, null, 2))
-                return n.model.id === action.tabId
-              })
-
-              const newNode = new TreeModel().parse(action.noteData)
-
-              tabNode.addChild(newNode)
-
-              window.alert(JSON.stringify(tabNode.model, null, 2))
-
-              return [tabNode.model]
-            }*/
         case 'DELETE_NOTE': {
             const tabData = state.data[action.tabId]
 
             const index = tabData.findIndex(node => node.id === action.noteId)
             tabData.splice(index, 1)
+
+
+            const currentParent = Object.entries(state.byParent).find(e => e[1].indexOf(action.noteId) !== -1)
+
+            if(currentParent) {
+                const currentIndex = currentParent[1].findIndex(n => n == action.noteId)
+                state.byParent[currentParent[0]].splice(currentIndex, 1)
+            }
 
             return state
 

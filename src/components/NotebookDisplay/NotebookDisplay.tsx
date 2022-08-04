@@ -137,11 +137,11 @@ const NotebookDisplay = ({tabId, getTabNotes, selectTabData, addRootNote, editNo
     >
       {Node}
     </Tree>
-      tabId: {tabId}
+{/*      tabId: {tabId}
       Editing: {editingId}
       <pre>
         {JSON.stringify(tabData, null, 2)}
-       </pre>
+       </pre>*/}
     </div>
   </>);
 }
