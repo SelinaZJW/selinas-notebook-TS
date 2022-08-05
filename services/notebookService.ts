@@ -53,7 +53,7 @@ const editTabOrderNonFirst = async (tabId, after) => {
   return response.data
 }
 
-// const editNoteTitle = async (title, noteId) => {
+// const setNoteTitle = async (title, noteId) => {
 //   const editedNote = await axios.get(`${baseUrl_notes}/${noteId}`)
 //   const updatedNote = {
 //     ...editedNote,
@@ -114,4 +114,4 @@ const deleteNote = async (noteId) => {
 
 export default  {}
 
-// export default { getAllTabs, getTabNotes, createNewTab, createNewTabAfter, createNewNote, editTabTitle, editTabOrderFirst,editTabOrderNonFirst, editNoteTitle, editNoteContent, editNoteParentNonRoot, editNoteParentRoot, editNoteOrderFirst, editNoteOrderNonFirst, deleteTab, deleteNote }
+// export default { getAllTabs, getTabNotes, createNewTab, createNewTabAfter, createNewNote, editTabTitle, editTabOrderFirst,editTabOrderNonFirst, setNoteTitle, editNoteContent, editNoteParentNonRoot, editNoteParentRoot, editNoteOrderFirst, editNoteOrderNonFirst, deleteTab, deleteNote }

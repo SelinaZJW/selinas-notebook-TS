@@ -3,7 +3,7 @@ import {Tree, TreeApi} from "react-arborist";
 import {mkNode} from "./components/Node";
 import {connect} from "react-redux";
 import {NodeId} from "../../model";
-import {editNoteTitle} from "../../store/actions/editNoteTitle";
+import {setNoteTitle} from "../../store/actions/setNoteTitle";
 import {bindActionCreators} from "redux";
 import {addDraftNote} from "../../store/actions/addDraftNote";
 import {MyData} from "../../../components/NotebookView/types";
@@ -37,7 +37,7 @@ import {getTabNotes} from "../../store/actions/getTabNotes";
 
 // export declare const Tree: <T extends IdObj>(props: TreeProps<T> & import("react").RefAttributes<TreeApi<T>>) => ReactElement<any, string | import("react").JSXElementConstructor<any>> | null;
 
-const NotebookDisplay = ({tabId, getTabNotes, selectTabData, addDraftNote, editNoteTitle, moveNotes}) => {
+const NotebookDisplay = ({tabId, getTabNotes, selectTabData, addDraftNote, setNoteTitle, moveNotes}) => {
   console.log("#NotebookDisplay")
 
 
@@ -116,7 +116,7 @@ const NotebookDisplay = ({tabId, getTabNotes, selectTabData, addDraftNote, editN
       indent={24}
       onMove={(dragIds, parentId, index) => moveNotes(tabId, dragIds, parentId, index)}
       onToggle={handleToggle}
-      onEdit={(id, title) => editNoteTitle(tabId, id, title)}
+      onEdit={(id, title) => setNoteTitle(tabId, id, title)}
       rowHeight={22}
       onClick={() => console.log("clicked the tree")}
       onContextMenu={() => console.log("context menu the tree")}
@@ -143,7 +143,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getTabNotes,
     addDraftNote,
-    editNoteTitle,
+    setNoteTitle,
     moveNotes
   }, dispatch)
 }

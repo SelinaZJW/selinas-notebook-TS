@@ -16,7 +16,7 @@ const createNewNote = async (tabId, newNote) => {
   return response.data
 }
 
-// const editNoteTitle = async (title, noteId) => {
+// const setNoteTitle = async (title, noteId) => {
 //   const editedNote = await axios.get(`${baseUrl_notes}/${noteId}`)
 //   const updatedNote = {
 //     ...editedNote,
