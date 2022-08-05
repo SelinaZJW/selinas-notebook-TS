@@ -16,7 +16,7 @@ export type TabAction =
 
 export type NotesState = {
     data: {[key: TabId]: NoteData[]}
-    byParent: {[key: NodeId]: NodeId[]}
+    childIds: {[key: NodeId]: NodeId[]}
     loading: 'idle' | 'pending'
     currentRequestId: string | undefined
     error: any

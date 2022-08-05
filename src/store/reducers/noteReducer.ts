@@ -5,7 +5,7 @@ import produce from "immer";
 
 const initialState: NotesState = {
     data: {},
-    byParent: {},
+    childIds: {},
     currentRequestId: "", error: undefined, loading: undefined
 }
 
@@ -37,7 +37,7 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
                 const childIds = action.notes.filter(note => note.parentId == parentId).map(note => note.id)
                 const pId = parentId || action.tabId
 
-                state.byParent[pId] = childIds
+                state.childIds[pId] = childIds
             })
 
             return state;
@@ -94,18 +94,18 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
             const {noteId, parentId, index} = action
             // window.alert(`SET_NOTE_PARENT ${noteId} ${parentId}`)
 
-            const currentParent = Object.entries(state.byParent).find(e => e[1].indexOf(noteId) !== -1)
+            const currentParent = Object.entries(state.childIds).find(e => e[1].indexOf(noteId) !== -1)
 
-            if(currentParent) {
+            if (currentParent) {
                 const currentIndex = currentParent[1].findIndex(n => n == noteId)
                 // window.alert(`currentParentIndex: ${currentParent}`)
-                state.byParent[currentParent[0]].splice(currentIndex, 1)
+                state.childIds[currentParent[0]].splice(currentIndex, 1)
             }
 
-            if(state.byParent[parentId]) {
-                state.byParent[parentId].splice(index, 0, noteId)
+            if (state.childIds[parentId]) {
+                state.childIds[parentId].splice(index, 0, noteId)
             } else {
-                state.byParent[parentId] = [noteId]
+                state.childIds[parentId] = [noteId]
             }
 
             return state;
@@ -114,19 +114,19 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
             const {parentId, noteId, afterId} = action
             // window.alert(`SET_NOTE_PARENT ${noteId} ${parentId}`)
 
-            const currentParent = Object.entries(state.byParent).find(e => e[1].indexOf(noteId) !== -1)
+            const currentParent = Object.entries(state.childIds).find(e => e[1].indexOf(noteId) !== -1)
 
-            if(currentParent) {
+            if (currentParent) {
                 const currentIndex = currentParent[1].findIndex(n => n == noteId)
                 // window.alert(`currentParentIndex: ${currentParent}`)
-                state.byParent[currentParent[0]].splice(currentIndex, 1)
+                state.childIds[currentParent[0]].splice(currentIndex, 1)
             }
 
-            if(state.byParent[parentId]) {
-                const index = state.byParent[parentId].indexOf(afterId)+1
-                state.byParent[parentId].splice(index, 0, noteId)
+            if (state.childIds[parentId]) {
+                const index = state.childIds[parentId].indexOf(afterId) + 1
+                state.childIds[parentId].splice(index, 0, noteId)
             } else {
-                state.byParent[parentId] = [noteId]
+                state.childIds[parentId] = [noteId]
             }
 
             return state;
@@ -138,11 +138,11 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
             tabData.splice(index, 1)
 
 
-            const currentParent = Object.entries(state.byParent).find(e => e[1].indexOf(action.noteId) !== -1)
+            const currentParent = Object.entries(state.childIds).find(e => e[1].indexOf(action.noteId) !== -1)
 
-            if(currentParent) {
+            if (currentParent) {
                 const currentIndex = currentParent[1].findIndex(n => n == action.noteId)
-                state.byParent[currentParent[0]].splice(currentIndex, 1)
+                state.childIds[currentParent[0]].splice(currentIndex, 1)
             }
 
             return state
