@@ -9,7 +9,7 @@ export type TabsState = {
 
 export type TabAction =
     | { type: "INIT_TABS"; tabs: ITab[] }
-    | { type: "SET_TAB"; tab: ITab }
+    | { type: "SET_TAB"; tabData: ITab }
     | { type: "DELETE_TAB"; tabId: TabId }
     // | { type: "SET_CATALOG"; catalog: IStoreCatalog | null }
     // | { type: "SET_LINE_QTY"; lineId: LineId; qty: Quantity }

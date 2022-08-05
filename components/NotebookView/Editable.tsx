@@ -35,7 +35,7 @@ const Editable = ({init, onEdit}) => {
   const handleBlur = useRefCallback(() => {
     console.log(value); // 👍 correct value
     onEdit(value)
-    // dispatch(editTab(html, props.tabId))
+    // dispatch(updateTab(html, props.tabId))
   }, [value]);
 
   return (

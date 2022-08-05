@@ -1,6 +1,6 @@
 import {getTabNotes} from "./getTabNotes";
 import {moveNotes} from "./moveNotes";
-import {editTab} from "./editTab";
+import {updateTab} from "./updateTab";
 import {updateNoteTitle} from "./updateNoteTitle";
 import {updateNote} from "./updateNote";
 import {deleteTab} from "./deleteTab";
@@ -17,7 +17,7 @@ export default {
     deleteTab,
     editNote: updateNote,
     editNoteTitle: updateNoteTitle,
-    editTab,
+    editTab: updateTab,
     getTabNotes,
     moveNotes
 }

@@ -16,11 +16,13 @@ import {DndProvider} from 'react-dnd'
 import {selectTabTree} from "../../store/selectors/selectTabTree";
 import {bindActionCreators} from "redux";
 import {createTab} from "../../store/actions/createTab";
-import {editTab} from "../../store/actions/editTab";
+import {updateTab} from "../../store/actions/updateTab";
 import {deleteTab} from "../../store/actions/deleteTab";
+import {ITab} from "../../model";
+import {editTabTitle} from "../../store/actions/editTabTitle";
 
 const NotesTemplate = (props) => {
-  const tabId = props.data.id
+  const tabId = props.data
 
   return (
       <>
@@ -30,15 +32,16 @@ const NotesTemplate = (props) => {
   );
 }
 
-const NotebookTabs: React.FC<any> = ({addTab, editTab, deleteTab}) => {
-  const tabs = useSelector((state: any) => Object.values(state.tabs.data))
+const NotebookTabs: React.FC<any> = ({addTab, editTabTitle, updateTab, deleteTab}) => {
+  const tabData = useSelector((state: any) => state.tabs.data)
+  const tabs: ITab[] = useSelector((state: any) => Object.values(state.tabs.data))
 
-  const [data, setData] = React.useState([]);
+  const [tabIds, setTabIds] = React.useState([]);
 
   useEffect(() => {
-    if(data.length == tabs.length) return;
+    if(tabIds.length == tabs.length) return;
 
-    setData(tabs)
+    setTabIds(tabs.map(t => t.id))
   }, [tabs])
 
   const [selectedItem, setSelectedItem] = React.useState(tabs[0]);
@@ -50,11 +53,11 @@ const NotebookTabs: React.FC<any> = ({addTab, editTab, deleteTab}) => {
       title: "new tab",
       children: [],
       level: 0,
-      index: data.length,
+      index: tabIds.length,
     };
 
     addTab("new tab").then(newTab => {
-      setData([...data, newTab]);
+      setTabIds([...tabIds, newTab]);
       setSelectedItem(newTab);
     })
 
@@ -74,23 +77,16 @@ const NotebookTabs: React.FC<any> = ({addTab, editTab, deleteTab}) => {
     }
   }
 
-  const renderTitle = (data) => {
-    // const closeHandler = () => {
-    //   closeButtonHandler(data);
-    // }
+  const renderTitle = (tabId) => {
+    const title = tabs.find(t => t.id == tabId).title
 
     const deleteTab = () => {
-      deleteTabHandler(data.id)
-    }
-
-    const editTabTitle = (newValue) => {
-      const updatedTab = {title: newValue}
-      editTab(data.id, updatedTab)
+      deleteTabHandler(tabId)
     }
 
     return (
         <div className='singleTab'>
-            <Editable init={`${data.title}`} onEdit={newValue => editTabTitle(newValue)} />
+            <Editable init={`${title}`} onEdit={newValue => editTabTitle(tabId, newValue)} />
             <Tooltip title="delete entire tab" arrow>
               <button id="deleteTabButton" onClick={deleteTab} >   
                 <Trash2 style={{ paddingTop: '2' }} size='17' id='deleteTabIcon' />
@@ -124,31 +120,31 @@ const NotebookTabs: React.FC<any> = ({addTab, editTab, deleteTab}) => {
   const onTabDrop = async (e) => {
     // window.alert("onTabDrop")
 
-    const newData = [...data];
+    const newData = [...tabIds];
     newData.splice(e.fromIndex, 1);
     newData.splice(e.toIndex, 0, e.itemData);
-    setData(newData);
+    setTabIds(newData);
 
-    const tabId = e.itemData.id
+    const tabId = e.itemData
     console.log(tabId)
     // const tabPreId = e.toData[e.toIndex-1].id
 
     if (e.toIndex === 0 && e.fromIndex !== e.toIndex) {
       const updatedTab = {first: true}
-      editTab(tabId, updatedTab)
+      updateTab(tabId, updatedTab)
       console.log("changed to first")
     }
     if (e.toIndex !== 0 && e.fromIndex > e.toIndex) {
-      const afterId = e.toData[e.toIndex-1].id
+      const afterId = e.toData[e.toIndex-1]
       const updatedTab = {after: afterId}
-      editTab(tabId, updatedTab)
+      updateTab(tabId, updatedTab)
       // setSelectedItem(e.toData[e.toIndex])
       console.log(`changed to front to ${[e.toIndex]} `)
     }
     if (e.toIndex !== 0 && e.fromIndex < e.toIndex) {
-      const afterId = e.toData[e.toIndex].id
+      const afterId = e.toData[e.toIndex]
       const updatedTab = {after: afterId}
-      editTab(tabId, updatedTab)
+      updateTab(tabId, updatedTab)
       // setSelectedItem(e.toData[e.toIndex + 1])
       console.log(`changed to later to ${[e.toIndex]} `)
     }
@@ -160,6 +156,15 @@ const NotebookTabs: React.FC<any> = ({addTab, editTab, deleteTab}) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
+      <pre>
+        {JSON.stringify(tabData, null, 2)}
+      </pre>
+      <pre>
+        {JSON.stringify(tabs, null, 2)}
+      </pre>
+      <pre>
+        {JSON.stringify(tabIds, null, 2)}
+      </pre>
 
       {/* solve problem of cannot have 2 html5 backends */}
       <div id="container">
@@ -179,7 +184,7 @@ const NotebookTabs: React.FC<any> = ({addTab, editTab, deleteTab}) => {
 
       <Sortable
         filter=".dx-tab"
-        data={data}
+        data={tabIds}
         itemOrientation="horizontal"
         dragDirection="horizontal"
         onDragStart={onTabDragStart}
@@ -187,7 +192,7 @@ const NotebookTabs: React.FC<any> = ({addTab, editTab, deleteTab}) => {
         
       >
         <TabPanel
-          dataSource={data}
+          dataSource={tabIds}
           // height={550}
           className="tabsBox"
           
@@ -223,8 +228,9 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    addTab: createTab,
-    editTab,
+    createTab,
+    editTabTitle,
+    updateTab,
     deleteTab
   }, dispatch)
 }
