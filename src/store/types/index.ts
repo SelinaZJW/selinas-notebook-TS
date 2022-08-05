@@ -25,6 +25,7 @@ export type NotesState = {
 export type NoteData = {
     id: NodeId
     title: string,
+    parentId?: NodeId
     draft?: boolean
 }
 

@@ -4,7 +4,7 @@ import {getTabNotes} from "./getTabNotes";
 import {nextNoteId} from "../util/nextNoteId";
 import {NoteData} from "../types";
 
-export const addDraftNote = (tabId: TabId, parentId: NodeId, title: string, after?: NodeId, noteIdCallback?: (NodeId) => void) => {
+export const addDraftNote = (tabId: TabId, parentId: NodeId, title: string, after?: NodeId) => {
     const id = nextNoteId()
 
     // const newNote: ICreateNote = {
@@ -19,6 +19,7 @@ export const addDraftNote = (tabId: TabId, parentId: NodeId, title: string, afte
             tabId,
             noteData: {
                 id,
+                parentId,
                 title: "",
                 draft: true
             }
@@ -34,8 +35,6 @@ export const addDraftNote = (tabId: TabId, parentId: NodeId, title: string, afte
         // const newN = await noteService.createNewNote(tabId, newNote)
         // console.log(newN)
 
-        noteIdCallback && noteIdCallback(id)
-
-        // dispatch(getTabNotes(tabId))
+        return id
     }
 }

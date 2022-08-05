@@ -105,21 +105,16 @@ export const mkNode = (tabId: TabId, noteIdCallback?: (NodeId) => void) => ({
   const open = state.isOpen;
   const title = data.title;
   const noteId = data.id
-  const parentId = data.parentId 
-  // const [showDetails, setShow] = useState(false);
-
-  // function handleShowDetails () {
-
-  // }
+  const parentId = data.parentId
 
   const handleAddNote = () => {
     const newNote = {title: "", parentId: parentId, after: noteId}
-    dispatch(addDraftNote(tabId, parentId, "", noteId, noteIdCallback))
+    dispatch(addDraftNote(tabId, parentId, "", noteId)).then(noteIdCallback)
   }
   const handleAddChildNote = () => {
     const newNote = {title: "", parentId: noteId}
     // dispatch(addDraftNote(tabId, newNote))
-    dispatch(addDraftNote(tabId, noteId, "", undefined, noteIdCallback))
+    dispatch(addDraftNote(tabId, noteId, "", undefined)).then(noteIdCallback)
   }
 
   const handleDeleteNote = () => {

@@ -156,7 +156,7 @@ const NotebookTabs: React.FC<any> = ({addTab, editTabTitle, updateTab, deleteTab
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <pre>
+{/*      <pre>
         {JSON.stringify(tabData, null, 2)}
       </pre>
       <pre>
@@ -164,7 +164,7 @@ const NotebookTabs: React.FC<any> = ({addTab, editTabTitle, updateTab, deleteTab
       </pre>
       <pre>
         {JSON.stringify(tabIds, null, 2)}
-      </pre>
+      </pre>*/}
 
       {/* solve problem of cannot have 2 html5 backends */}
       <div id="container">

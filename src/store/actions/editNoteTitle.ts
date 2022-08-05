@@ -3,7 +3,7 @@ import {useMemo} from "react";
 import TreeModel from "tree-model-improved";
 import {updateNote} from "./updateNote";
 
-export const updateNoteTitle = (tabId: TabId, id: NodeId, title: string) => {
+export const editNoteTitle = (tabId: TabId, id: NodeId, title: string) => {
 
     return (dispatch, getState) => {
         console.log(`editNoteTitle(${id}, ${title})`)

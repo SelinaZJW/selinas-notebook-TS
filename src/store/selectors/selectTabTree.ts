@@ -23,7 +23,7 @@ const buildTree = (tabId, allNodes, byParent) => {
         const childNodeIds = byParent[parentId]
         // const children = childNodeIds ? childNodeIds.map(nodeId => childrenOf(nodeId)) : []
 
-        const children = childNodeIds ? childNodeIds.map(id => buildChild(id, level)) : []
+        const children = childNodeIds ? childNodeIds.map(id => buildChild(id, parentId, level)) : []
 
         // return {
         //     ...note,
@@ -33,12 +33,13 @@ const buildTree = (tabId, allNodes, byParent) => {
         return children
     }
 
-    function buildChild(nodeId, level) {
+    function buildChild(nodeId, parentId, level) {
         const note = allNodes.find(note => note.id == nodeId)
 
         return {
             // id: nodeId,
             ...note,
+            parentId,
             level,
             children: childrenOf(nodeId, level+1)
         }

@@ -29,6 +29,7 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
 
             state.data[action.tabId] = action.notes.map(note => ({
                 id: note.id,
+                parentId: note.parentId,
                 title: note.title
             }))
 
