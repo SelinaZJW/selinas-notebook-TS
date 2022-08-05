@@ -8,8 +8,8 @@ import {AlignLeft} from 'react-feather';
 import {Button} from '@mui/material';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {selectTabTree} from "../../src/store/selectors/selectTabTree";
-import {MyData} from "./types";
+import {selectTabTree} from "../../../store/selectors/selectTabTree";
+import {MyData} from "../types";
 
 function getDataDepth(dataNode: MyData): number {
   return (Array.isArray(dataNode.children) && dataNode.children?.length !== 0) ?

@@ -3,7 +3,7 @@ import React, {CSSProperties, FocusEvent, KeyboardEvent} from "react";
 import {ChevronDown, ChevronRight, CornerDownLeft, Edit, FilePlus, FileText, Folder, Trash2} from "react-feather";
 import Tooltip from '@mui/material/Tooltip';
 import {NodeHandlers, NodeState, TreeApi} from "react-arborist";
-import {MyData} from "../../../../components/NotebookView/types";
+import {MyData} from "../types";
 
 import {useDispatch} from "react-redux";
 import {TabId} from "../../../model";

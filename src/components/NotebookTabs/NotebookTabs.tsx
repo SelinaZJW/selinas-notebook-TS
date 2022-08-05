@@ -6,7 +6,7 @@ import 'devextreme/data/odata/store';
 import 'devextreme/dist/css/dx.light.css';
 import {Plus, Trash2} from 'react-feather'
 import Tooltip from '@mui/material/Tooltip';
-import Editable from '../../../components/NotebookView/Editable';
+import Editable from '../NotebookDisplay/components/Editable';
 import NotebookDisplay from '../NotebookDisplay/NotebookDisplay';
 
 import {connect, useSelector} from 'react-redux';

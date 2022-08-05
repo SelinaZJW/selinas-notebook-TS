@@ -4,7 +4,7 @@ import {RootState} from "../store";
 export const selectTabTree = (tabId: TabId) => (state: RootState) => {
     const tabData = state.tabs.data[tabId]
     const noteTree = state.notes.data[tabId]
-    const byParent = state.notes.byParent
+    const byParent = state.notes.childIds
 
     const children = noteTree ? buildTree(tabId, noteTree, byParent) : []
 
@@ -17,27 +17,16 @@ export const selectTabTree = (tabId: TabId) => (state: RootState) => {
 }
 
 const buildTree = (tabId, allNodes, byParent) => {
-
-
     function childrenOf(parentId, level) {
         const childNodeIds = byParent[parentId]
-        // const children = childNodeIds ? childNodeIds.map(nodeId => childrenOf(nodeId)) : []
 
-        const children = childNodeIds ? childNodeIds.map(id => buildChild(id, parentId, level)) : []
-
-        // return {
-        //     ...note,
-        //     children
-        // }
-
-        return children
+        return childNodeIds ? childNodeIds.map(id => buildChild(id, parentId, level)) : []
     }
 
     function buildChild(nodeId, parentId, level) {
         const note = allNodes.find(note => note.id == nodeId)
 
         return {
-            // id: nodeId,
             ...note,
             parentId,
             level,
@@ -46,13 +35,4 @@ const buildTree = (tabId, allNodes, byParent) => {
     }
 
     return childrenOf(tabId, 1)
-
-    // return allNodes.filter(node => node.parentId === parent)
-        // .map(child => ({ ...child, children: buildTree(allNodes, byParent, child.id) }));
 }
-
-
-/*
-const arrayToTree = (allNodes, parent = null) =>
-    allNodes.filter(node => node.parentId === parent)
-        .map(child => ({ ...child, children: arrayToTree(allNodes, child.id) }));*/

@@ -1,8 +1,19 @@
 import TreeModel from "tree-model-improved";
-import {changeLevel} from "../../../components/NotebookView/backend";
 import {TabId} from "../../model";
 import {updateNote} from "./updateNote";
 import {selectTabTree} from "../selectors/selectTabTree";
+import {MyData} from "../../components/NotebookDisplay/types";
+
+export function changeLevel(dataNode: MyData, parentLevel: number): MyData  {
+    dataNode.level = parentLevel;
+    if (dataNode.children) {
+        dataNode.children = dataNode.children.map((child:any) => ({...child, level: dataNode.level +1}));
+        dataNode.children.forEach(child => changeLevel(child, dataNode.level +1));    //change level recursively, to chang all children of children
+    }
+
+    // console.log(dataNode)
+    return dataNode;
+}
 
 function findById(node: any, id: string): TreeModel.Node<any> | null {
     return node.first((n: any) => n.model.id === id);

@@ -6,10 +6,10 @@ import {NodeId} from "../../model";
 import {setNoteTitle} from "../../store/actions/setNoteTitle";
 import {bindActionCreators} from "redux";
 import {addDraftNote} from "../../store/actions/addDraftNote";
-import {MyData} from "../../../components/NotebookView/types";
+import {MyData} from "./types";
 import {moveNotes} from "../../store/actions/moveNotes";
 import {selectTabTree} from "../../store/selectors/selectTabTree";
-import DisplaySlider from "../../../components/NotebookView/DisplaySlider";
+import DisplaySlider from "./components/DisplaySlider";
 import {getTabNotes} from "../../store/actions/getTabNotes";
 
 // export interface TreeProps<T> {
