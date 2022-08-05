@@ -25,12 +25,21 @@ export const addDraftNote = (tabId: TabId, parentId: NodeId, title: string, afte
             }
         })
 
-        dispatch({
-            type: 'SET_NOTE_PARENT',
-            noteId: id,
-            parentId: parentId || tabId,
-            index: 0
-        })
+        if(after) {
+            dispatch({
+                type: 'PUT_NOTE_AFTER',
+                noteId: id,
+                parentId: parentId || tabId,
+                afterId: after
+            })
+        } else {
+            dispatch({
+                type: 'SET_NOTE_PARENT',
+                noteId: id,
+                parentId: parentId || tabId,
+                index: 0
+            })
+        }
 
         // const newN = await noteService.createNewNote(tabId, newNote)
         // console.log(newN)

@@ -110,6 +110,27 @@ const noteReducer = produce((state: NotesState = initialState, action: NoteActio
 
             return state;
         }
+        case 'PUT_NOTE_AFTER': {
+            const {parentId, noteId, afterId} = action
+            // window.alert(`SET_NOTE_PARENT ${noteId} ${parentId}`)
+
+            const currentParent = Object.entries(state.byParent).find(e => e[1].indexOf(noteId) !== -1)
+
+            if(currentParent) {
+                const currentIndex = currentParent[1].findIndex(n => n == noteId)
+                // window.alert(`currentParentIndex: ${currentParent}`)
+                state.byParent[currentParent[0]].splice(currentIndex, 1)
+            }
+
+            if(state.byParent[parentId]) {
+                const index = state.byParent[parentId].indexOf(afterId)+1
+                state.byParent[parentId].splice(index, 0, noteId)
+            } else {
+                state.byParent[parentId] = [noteId]
+            }
+
+            return state;
+        }
         case 'DELETE_NOTE': {
             const tabData = state.data[action.tabId]
 

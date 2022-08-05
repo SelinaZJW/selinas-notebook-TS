@@ -33,6 +33,7 @@ export type NoteAction =
     // | { type: "INIT_NOTES"; children: INote[] }
     | { type: "SET_TAB_NOTES"; tabId: TabId, notes: INote[] }
     | { type: "ADD_ROOT_NOTE"; tabId: TabId, note: INote }
-    | { type: "SET_NOTE"; tabId: TabId, noteData: INote }
-    | { type: "SET_NOTE_PARENT"; noteId: NodeId, parentId: NodeId, index: number }
+    | { type: "SET_NOTE", tabId: TabId, noteData: INote }
+    | { type: "SET_NOTE_PARENT", noteId: NodeId, parentId: NodeId, index: number }
+    | { type: "PUT_NOTE_AFTER", parentId: NodeId, noteId: NodeId, afterId: NodeId }
     | { type: "DELETE_NOTE"; tabId: TabId, noteId: NodeId }

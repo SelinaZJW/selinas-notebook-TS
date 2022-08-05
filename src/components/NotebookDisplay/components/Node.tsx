@@ -10,6 +10,7 @@ import {TabId} from "../../../model";
 import {deleteNote} from "../../../store/actions/deleteNote";
 import {createNote} from "../../../store/actions/createNote";
 import {addDraftNote} from "../../../store/actions/addDraftNote";
+import {AppDispatch} from "../../../store/store";
 
 
 const size = 16;
@@ -100,7 +101,7 @@ export const mkNode = (tabId: TabId, noteIdCallback?: (NodeId) => void) => ({
   handlers,
   tree
 }: NodeRendererProps<MyData>) => {
-  const dispatch = useDispatch()
+  const dispatch: (any) => Promise<any> = useDispatch()
   const folder = Array.isArray(data.children) && data.children?.length !== 0
   const open = state.isOpen;
   const title = data.title;
