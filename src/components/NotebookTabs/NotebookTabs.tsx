@@ -201,7 +201,7 @@ const NotebookTabs: React.FC<any> = ({createTab, setTabTitle, updateTab, deleteT
           itemComponent={NotesTemplate}
         />
 
-        <pre>
+{/*        <pre>
         {JSON.stringify(tabData, null, 2)}
       </pre>
         <pre>
@@ -209,7 +209,7 @@ const NotebookTabs: React.FC<any> = ({createTab, setTabTitle, updateTab, deleteT
       </pre>
         <pre>
         {JSON.stringify(tabIds, null, 2)}
-      </pre>
+      </pre>*/}
 
 {/*        <pre>
         {JSON.stringify(tabs, null, 2)}
