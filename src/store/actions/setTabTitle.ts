@@ -1,6 +1,6 @@
 import tabService from "../../../services/tabService";
 
-export const editTabTitle = (tabId, title) => {
+export const setTabTitle = (tabId, title) => {
     return async dispatch => {
         const newTabData = {
             id: tabId,

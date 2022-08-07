@@ -19,7 +19,7 @@ import {createTab} from "../../store/actions/createTab";
 import {updateTab} from "../../store/actions/updateTab";
 import {deleteTab} from "../../store/actions/deleteTab";
 import {ITab} from "../../model";
-import {editTabTitle} from "../../store/actions/editTabTitle";
+import {setTabTitle} from "../../store/actions/setTabTitle";
 
 const NotesTemplate = (props) => {
   const tabId = props.data
@@ -32,7 +32,7 @@ const NotesTemplate = (props) => {
   );
 }
 
-const NotebookTabs: React.FC<any> = ({addTab, editTabTitle, updateTab, deleteTab}) => {
+const NotebookTabs: React.FC<any> = ({createTab, setTabTitle, updateTab, deleteTab}) => {
   const tabData = useSelector((state: any) => state.tabs.data)
   const tabs: ITab[] = useSelector((state: any) => Object.values(state.tabs.data))
 
@@ -56,8 +56,8 @@ const NotebookTabs: React.FC<any> = ({addTab, editTabTitle, updateTab, deleteTab
       index: tabIds.length,
     };
 
-    addTab("new tab").then(newTab => {
-      setTabIds([...tabIds, newTab]);
+    createTab("new tab").then(newTab => {
+      setTabIds([...tabIds, newTab.id]);
       setSelectedItem(newTab);
     })
 
@@ -78,7 +78,7 @@ const NotebookTabs: React.FC<any> = ({addTab, editTabTitle, updateTab, deleteTab
   }
 
   const renderTitle = (tabId) => {
-    const title = tabs.find(t => t.id == tabId).title
+    const title = tabs.find(t => t.id == tabId)?.title
 
     const deleteTab = () => {
       deleteTabHandler(tabId)
@@ -86,7 +86,7 @@ const NotebookTabs: React.FC<any> = ({addTab, editTabTitle, updateTab, deleteTab
 
     return (
         <div className='singleTab'>
-            <Editable init={`${title}`} onEdit={newValue => editTabTitle(tabId, newValue)} />
+            <Editable init={`${title}`} onEdit={newValue => setTabTitle(tabId, newValue)} />
             <Tooltip title="delete entire tab" arrow>
               <button id="deleteTabButton" onClick={deleteTab} >   
                 <Trash2 style={{ paddingTop: '2' }} size='17' id='deleteTabIcon' />
@@ -156,15 +156,7 @@ const NotebookTabs: React.FC<any> = ({addTab, editTabTitle, updateTab, deleteTab
 
   return (
     <DndProvider backend={HTML5Backend}>
-{/*      <pre>
-        {JSON.stringify(tabData, null, 2)}
-      </pre>
-      <pre>
-        {JSON.stringify(tabs, null, 2)}
-      </pre>
-      <pre>
-        {JSON.stringify(tabIds, null, 2)}
-      </pre>*/}
+
 
       {/* solve problem of cannot have 2 html5 backends */}
       <div id="container">
@@ -208,6 +200,17 @@ const NotebookTabs: React.FC<any> = ({addTab, editTabTitle, updateTab, deleteTab
           itemTitleRender={renderTitle}
           itemComponent={NotesTemplate}
         />
+
+        <pre>
+        {JSON.stringify(tabData, null, 2)}
+      </pre>
+        <pre>
+        {JSON.stringify(tabs, null, 2)}
+      </pre>
+        <pre>
+        {JSON.stringify(tabIds, null, 2)}
+      </pre>
+
 {/*        <pre>
         {JSON.stringify(tabs, null, 2)}
       </pre>
@@ -229,7 +232,7 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     createTab,
-    editTabTitle,
+    setTabTitle,
     updateTab,
     deleteTab
   }, dispatch)

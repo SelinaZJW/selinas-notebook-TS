@@ -1,17 +1,17 @@
 import tabService from "../../../services/tabService";
 
-export const updateTab = (tabId, updatedTab) => {
-    return async dispatch => {
-        dispatch({
-            type: 'SET_TAB',
-            tabData: {
-                id: tabId,
-                title: updatedTab.title
-            }
-        })
+export const updateTab = (tabId, newTab) => {
 
-        const editedTab = await tabService.editTab(tabId, updatedTab)
-        console.log(editedTab)
+    return async dispatch => {
+        tabService.editTab(tabId, newTab).then(updatedTab => {
+            dispatch({
+                type: 'SET_TAB',
+                tabData: {
+                    id: tabId,
+                    title: updatedTab.title
+                }
+            })
+        })
 
         /*const tabs = await tabService.getAllTabs()
         const tabIds = tabs.map(t => t.id)

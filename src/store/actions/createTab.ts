@@ -7,7 +7,7 @@ export const createTab = (title, after?) => {
 
         dispatch({
             type: 'SET_TAB',
-            tab: newTab
+            tabData: newTab
         })
 
         return newTab
