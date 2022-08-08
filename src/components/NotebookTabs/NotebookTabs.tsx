@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Editable from '../NotebookDisplay/components/Editable';
 import NotebookDisplay from '../NotebookDisplay/NotebookDisplay';
 
-import {connect, useSelector} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 
 import {HTML5Backend} from 'react-dnd-html5-backend'
 import {DndProvider} from 'react-dnd'
@@ -33,18 +33,32 @@ const NotesTemplate = (props) => {
 }
 
 const NotebookTabs: React.FC<any> = ({createTab, setTabTitle, updateTab, deleteTab}) => {
+  const dispatch = useDispatch()
+
   const tabData = useSelector((state: any) => state.tabs.data)
-  const tabs: ITab[] = useSelector((state: any) => Object.values(state.tabs.data))
+  const tabIds = useSelector((state: any) => state.tabs.orderedTabIds)
+  // const tabs: ITab[] = useSelector((state: any) => Object.values(state.tabs.data))
 
-  const [tabIds, setTabIds] = React.useState([]);
+  // const [tabIds, setTabIds] = React.useState([]);
 
-  useEffect(() => {
-    if(tabIds.length == tabs.length) return;
+  /*useEffect(() => {
+    const newTabIds = Object.keys(tabData)
 
-    setTabIds(tabs.map(t => t.id))
-  }, [tabs])
+    Object.values(tabData.sort((a,b)=>a.weight-b.weight)
 
-  const [selectedItem, setSelectedItem] = React.useState(tabs[0]);
+    if(tabIds.length == newTabIds.length) return;
+
+    setTabIds(newTabIds)
+  }, [tabData])*/
+
+  const setTabIds = (tabIds) => {
+    dispatch({
+      type: 'SET_ORDERED_TAB_IDS',
+      tabIds
+    })
+  }
+
+  const [selectedItem, setSelectedItem] = React.useState(tabIds[0]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const addTabHandler = () => {
@@ -78,7 +92,7 @@ const NotebookTabs: React.FC<any> = ({createTab, setTabTitle, updateTab, deleteT
   }
 
   const renderTitle = (tabId) => {
-    const title = tabs.find(t => t.id == tabId)?.title
+    const title = tabData[tabId]?.title
 
     const deleteTab = () => {
       deleteTabHandler(tabId)
@@ -118,7 +132,7 @@ const NotebookTabs: React.FC<any> = ({createTab, setTabTitle, updateTab, deleteT
 
   //lag in updating, selection is a little crazy
   const onTabDrop = async (e) => {
-    // window.alert("onTabDrop")
+    console.log("onTabDrop")
 
     const newData = [...tabIds];
     newData.splice(e.fromIndex, 1);
@@ -205,18 +219,9 @@ const NotebookTabs: React.FC<any> = ({createTab, setTabTitle, updateTab, deleteT
         {JSON.stringify(tabData, null, 2)}
       </pre>
         <pre>
-        {JSON.stringify(tabs, null, 2)}
-      </pre>
-        <pre>
         {JSON.stringify(tabIds, null, 2)}
       </pre>*/}
 
-{/*        <pre>
-        {JSON.stringify(tabs, null, 2)}
-      </pre>
-        <pre>
-        {JSON.stringify(data, null, 2)}
-      </pre>*/}
       </Sortable>
 
     </DndProvider>

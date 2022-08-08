@@ -3,6 +3,7 @@ import produce from "immer";
 
 const initialState: TabsState = {
   data: {},
+  orderedTabIds: [],
   currentRequestId: "", error: undefined, loading: undefined
 }
 
@@ -12,6 +13,8 @@ const tabReducer = produce((state: TabsState = initialState, action: TabAction) 
       action.tabs.forEach(tab => {
         state.data[tab.id] = tab
       })
+
+      state.orderedTabIds = action.tabs.map(t => t.id)
 
       return state
     }
@@ -29,13 +32,17 @@ const tabReducer = produce((state: TabsState = initialState, action: TabAction) 
       const newData = {...state.data}
       delete newData[action.tabId]
 
-      return {
-        ...state,
-        data: newData
-      }
+      state.data = newData
+      state.orderedTabIds = state.orderedTabIds.filter(tabId => tabId != action.tabId)
+
+      return state
     }
+    case 'SET_ORDERED_TAB_IDS':
+      state.orderedTabIds = action.tabIds
+
+      return state;
     default:
-    return state
+      return state
   } 
 })
 
