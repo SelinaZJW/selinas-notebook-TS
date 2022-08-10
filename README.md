@@ -27,4 +27,4 @@ Change display levels via the slider, open and closer folders, add new root note
 
 [notebook-notes.webm](https://user-images.githubusercontent.com/84102041/183893981-5fe14d04-ed24-460c-b517-2731cfbf3e3b.webm)
 
-[Demo](https://main--selinas-notebook-ts.netlify.app/notebook).
+Experience these features in [Demo](https://main--selinas-notebook-ts.netlify.app/notebook).
