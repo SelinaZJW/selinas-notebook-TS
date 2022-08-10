@@ -4,7 +4,7 @@ A notebook UI that facilitates viewing and managing hierarchical information str
 
 Libraries used: 
 - [React-arborist](https://github.com/brimdata/react-arborist) for the note tree component.
-- [DevExtreme Tab Drag & Drop](https://js.devexpress.com/Demos/WidgetsGallery/Demo/TabPanel/SortableClosableTabs/React/Light/) for draggable tab panels.
+- [DevExtreme Tab Drag & Drop](https://js.devexpress.com/Demos/WidgetsGallery/Demo/TabPanel/SortableClosableTabs/React/Light/) for the tab panel.
 - [React-contenteditable](https://github.com/lovasoa/react-contenteditable) for editable tabs.
 - [Immer](https://github.com/immerjs/immer) for terser, mutable style reducer code.
 - [Netlify](https://www.netlify.com/) for push-to-deploy releases via Github.
