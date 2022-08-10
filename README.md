@@ -11,8 +11,8 @@ Libraries used:
 - Redux and Redux Thunk.
 - Typescript.
 
-Check out my blog post that discusses the project and codebase in detail:
-- [tech post](https://selinazjw.com/blog/notebook-tech-post);
+Check out my blog posts that discusses the project and codebase in detail:
+- [tech post](https://selinazjw.com/blog/notebook-tech-post),
 - [motivation post](https://selinazjw.com/blog/motivations-for-notebook).
 
 ## Product features
