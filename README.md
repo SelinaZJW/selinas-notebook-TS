@@ -8,7 +8,7 @@ See below 2 short clips showcasing the key product features of the notebook.
 
 Select and view different note tabs, drag and drop, edit tab title, add new tab, and delete.
 
-[notebook-tabs-trimmed.mov](https://user-images.githubusercontent.com/84102041/183894027-993e98d3-4016-4199-9d1c-ce3dd31c530b.mov)
+[notebook-tabs-trimmed.webm](https://user-images.githubusercontent.com/84102041/183894027-993e98d3-4016-4199-9d1c-ce3dd31c530b.webm)
 
 - ### Notes
 
