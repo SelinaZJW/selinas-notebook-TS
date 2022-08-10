@@ -11,6 +11,8 @@ Libraries used:
 - Redux and Redux Thunk.
 - Typescript.
 
+[Demo](https://main--selinas-notebook-ts.netlify.app/notebook).
+
 
 ## Product features
 
