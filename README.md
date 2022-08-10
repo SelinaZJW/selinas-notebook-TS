@@ -11,9 +11,6 @@ Libraries used:
 - Redux and Redux Thunk.
 - Typescript.
 
-[Demo](https://main--selinas-notebook-ts.netlify.app/notebook).
-
-
 ## Product features
 
 See below 2 short clips showcasing the key product features of the notebook.
@@ -30,3 +27,4 @@ Change display levels via the slider, open and closer folders, add new root note
 
 [notebook-notes.webm](https://user-images.githubusercontent.com/84102041/183893981-5fe14d04-ed24-460c-b517-2731cfbf3e3b.webm)
 
+[Demo](https://main--selinas-notebook-ts.netlify.app/notebook).
